@@ -1,16 +1,18 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
+#from .models import Applicant
 
 # Create your views here.
 def applicantPageView(request):
-    return HttpResponse("Applicant Page")
+    #a = App
+    return render(request, "applicant/landing.html")
 
 def skillsPageView(request):
-    return HttpResponse("Skills Page")
+    return render(request, "applicant/skills.html")
 
 def resumePageView(request):
-    return HttpResponse("Resume Page")
+    return render(request, "applicant/resume.html")
 
 def profilePageView(request):
-    return HttpResponse("Profile Page")
+    return render(request, "applicant/profile.html")
 

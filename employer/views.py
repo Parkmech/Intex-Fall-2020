@@ -4,18 +4,18 @@ from django.http import HttpResponse
 
 # Create your views here.
 def employerPageView(request):
-    return HttpResponse("Employer Page")
+    return render(request, "employer/landing.html")
 
 def employerSkillView(request):
-    return HttpResponse("Employer Skill Page")
+    return render(request, "employer/skills.html")
 
 def employerProfileView(request):
-    return HttpResponse("Employer Profile")
+    return render(request, "employer/profile.html")
 
 def employerCreateView(request):
-    return HttpResponse("Employer Create Listing Page")
+    return render(request, 'employer/createlisting.html')
 
 def employerEditView(request):
-    return HttpResponse("Employer Edit Listing Page")
+    return render(request, "employer/editlisting.html")
 
 

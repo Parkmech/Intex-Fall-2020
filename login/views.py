@@ -4,15 +4,15 @@ from django.http import HttpResponse
 # Create your views here.
 
 def candidateLoginView(request):
-    return HttpResponse('Default Login Page (Candidate)')
+    return render(request, "login/candidatelogin.html")
 
 def employerLoginView(request):
-    return HttpResponse('Employer Login Page')
+    return render(request, "login/employerlogin.html")
 
 def employerSignUpView(request):
-    return HttpResponse('Employer Sign up Page')
+    return render(request, "login/employersignup.html")
 
 def candidateSignUpView(request):
-    return HttpResponse('Candidate Sign up Page')
+    return render(request, "login/candidatesignup.html")
 
 
