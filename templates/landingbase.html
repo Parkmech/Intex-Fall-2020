@@ -53,30 +53,36 @@
                 {% endblock %}
                 <!-- Portfolio Grid Items-->
                 <div class="row justify-content-center">
+                    {% for listing in listings %}
                     <!-- Portfolio Item 1-->
                     <div class="col-md-6 col-lg-4 mb-5" >
-                        <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal1">
+                        <div class="portfolio-item mx-auto" style='background-color:#6c757d' data-toggle="modal" data-target="#portfolioModal1">
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
                             <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
-                            <div>
-                                <h5>Job Title</h5>
-                                <p>Company Name</p>
+                            <div style = 'padding:10px'>
+                                <h5>{{listing.job_title}}</h5>
                                 <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
                                     <div style='max-width:65%'>
-                                        <p>sample description text goes here stuff about the job for like 10 secionds...</p>
+                                        
+                                        <p>{{listing.organization}}</p>
+                                        <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
+                                            <div>
+                                                <p>sample description text goes here stuff about the job for like 10 secionds...</p>
+                                            </div> 
+                                        </div>
                                     </div>
-                                    <div style='display:flex;flex-direction:column;'>
-                                        {% for i in '123' %}
-                                        <span style = 'display:flex;flex-direction:row;'><p>Skill</p><p> - lvl</p></span>
-                                        {% endfor %}
-                                    </div>
+                                        <div style='display:flex;flex-direction:column;padding-left:10px'>
+                                            {% for i in '123' %}
+                                            <span style = 'display:flex;flex-direction:row;'><p>{{ 'skills[0]' }}</p><p> - lvl</p></span>
+                                            {% endfor %}
+                                        </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
+                    {% endfor %}
                     <!-- Portfolio Item 2-->
                     <div class="col-md-6 col-lg-4 mb-5">
                         <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">

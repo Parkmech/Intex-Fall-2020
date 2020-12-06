@@ -1,0 +1,67 @@
+{% extends 'landingbase.html'%}
+{% load static %}
+
+{% block content%}
+<!-- Contact Section-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">What's in {{recipe}}?</h2>
+                <!-- Icon Divider-->
+                <div class="divider-custom">
+                    <div class="divider-custom-line"></div>
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                    <div class="divider-custom-line"></div>
+                </div>
+                <!-- Contact Section Form-->
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
+                        <div>
+                            {% for i in ingredients %}
+                            <div style='display:flex;'>
+                                <h3>{{i}}</h3><p style='color:#f8f9fa'>--</p><form method='POST' action="{% url 'deleteIngredient' recipe=recipe.id %}">{% csrf_token %}<input hidden name='ingredient' value = {{i.id}}><button class='btn btn-primary'>Delete</button></form>
+                            </div>
+                            <br>
+                            {% endfor %}
+                        </div>
+                        <form id="createForm" name="create" novalidate="novalidate" method="POST" action="{% url 'addIngredient' recipe=recipe.id %}">
+                            {% csrf_token %}
+                            <div class="control-group">
+                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                    <label>Measurement Amount</label>
+                                    <input autofocus class="form-control" id="ingredienttitle" type="text" placeholder="Measurement Amount" 
+                                    name="MeasurementAmount"
+                                    required="required" data-validation-required-message="Please enter your recipe title." />
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                    <label>Measurement Type</label>
+                                    <input autofocus class="form-control" id="ingredienttitle" type="text" placeholder="Measurement Type (oz, cup, etc.)" 
+                                    name="MeasurementType"
+                                    required="required" data-validation-required-message="Please enter your recipe title." />
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                                    <label>Ingredient Name</label>
+                                    <input autofocus class="form-control" id="ingredienttitle" type="text" placeholder="Ingredient Name" 
+                                    name="IngredientName"
+                                    required="required" data-validation-required-message="Please enter your recipe title." />
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <br />
+                            <div id="success"></div>
+                            <div class="form-group"><button class="btn btn-primary " id="sendMessageButton" type="submit">Add Ingredient</button></div>
+                            
+                        </form>
+                        <a href={% url 'index'%}><button class='btn btn-primary' >Done</button></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock%}
