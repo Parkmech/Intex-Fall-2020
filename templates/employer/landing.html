@@ -1,32 +1,90 @@
-{% extends 'mainbase.html' %}
+{% extends 'landingbase.html' %}
+{% load static %}
 
-{% block  content%}
-<div class="col-md-6 col-lg-4 mb-5" >
-                        <div class="portfolio-item mx-auto" style='background-color:#6c757d' data-toggle="modal" data-target="#portfolioModal1">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
-                            <div style = 'padding:10px'>
-                                <h5>Job Title</h5>
-                                <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
-                                    <div style='max-width:65%'>
-                                        
-                                        <p>Company Name</p>
-                                        <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
-                                            <div>
-                                                <p>sample description text goes here stuff about the job for like 10 secionds...</p>
-                                            </div> 
-                                        </div>
+{% block listing_header %}
+<div>
+    <ul style='display:flex;text-decoration: underline;'>
+        <li class="nav-link"><a href='#'>Suggested Applicants</a></li>
+        <li class="nav-link"><a href='#'>Saved Applicants</a></li>
+        <li class="nav-link"><a href='#'>Offers Extended</a></li>
+    </ul>
+</div>
+{% endblock %}
+{% block dashboard %}
+<h1>Applicants</h1>
+<div style='display:flex; flex-wrap: wrap; flex-direction: row'> 
+{% for applicant in applicants %}
+    <!-- Portfolio Item 1-->
+
+    <div class="portfolio-item mx-auto" style='margin: .5rem !important; margin-bottom: .5rem !important; max-width: 15rem; background-color:#6c757d; padding:1rem !important;  display:flex; flex-wrap:wrap; flex-direction:row' data-toggle="modal" data-target="#portfolioModal{{applicant.id}}">
+        
+        <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
+        <div style='magrin:0 !important'>
+            <h5>{{applicant}}</h5>
+            <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
+                
+                <div style='display:flex;flex-direction:column;padding-left:10px'>
+                    {% for skill in skills %}
+                        {% if skill.applicant == applicant %}
+                        <span style = 'display:flex;flex-direction:row;'><p>{{ skill }}</p></span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+{% endfor %}
+</div>
+                    
+{% endblock %}
+{% block popups %}
+<h1>popups</h1>
+    {% for applicant in applicants %}
+    <!-- Portfolio Modals-->
+        <div class="portfolio-modal modal fade" id="portfolioModal{{applicant.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary mb-0" id="portfolioModal1Label">{{applicant}}</h2>
+                                    <br>
+                                    <h4>{{applicant.username}}</h4>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
                                     </div>
-                                        <div style='display:flex;flex-direction:column;padding-left:10px'>
-                                                {% for i in '123' %}
-                                                <span style = 'display:flex;flex-direction:row;'><p>Skill</p><p> - lvl</p></span>
-                                                {% endfor %}
-                                            </div>
-                                    
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png" alt="" />
+                                    <!-- Portfolio Modal - Text-->
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                    {% for skill in skills %}
+                                    {% if skill.applicant == applicant %}
+                                        <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                            <p style="margin: 0;">{{skill}}</p>
+                                        </div>
+                                    {% endif %}   
+                                    {% endfor %}
+                                    </div>
+                                    <p class="mb-5">{{listing.description}}</p>
+                                    <button class="btn btn-primary" data-dismiss="modal">
+                                        <i class="fas fa-times fa-fw"></i>
+                                        Close Listing
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-{% endblock  %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

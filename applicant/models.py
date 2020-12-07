@@ -30,7 +30,7 @@ class ApplicantSkill(models.Model):
         validators=[MaxValueValidator(4), MinValueValidator(0)])
 
     def __str__(self):
-        return str(self.applicant) + ' -- ' + str(self.skill).title() + ' -- Level: ' + str(self.skill_level)
+        return str(self.skill).title() + ' - ' + str(self.skill_level)
 
 class Organization(models.Model):
     company_name = models.CharField(max_length=50)
@@ -83,7 +83,6 @@ class Offer(models.Model):
 
     def __str__(self):
         return str(self.application)
-
 class PreferredSkill(models.Model):
     skill = ForeignKey(Skill, on_delete=CASCADE)
     listing = ForeignKey(Listing, on_delete=CASCADE)
@@ -91,4 +90,4 @@ class PreferredSkill(models.Model):
         validators=[MaxValueValidator(4),MinValueValidator(0)])
 
     def __str__(self):
-        return str(self.listing) + ' -- ' + str(self.skill).title()  + ' -- Level: ' + str(self.skill_level) 
+        return str(self.skill).title() + ' - ' + str(self.skill_level) 

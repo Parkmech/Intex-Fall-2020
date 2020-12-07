@@ -5,6 +5,7 @@ from .views import candidateLoginView,employerLoginView, employerSignUpView,cand
 urlpatterns = [
     path('employer/login', employerLoginView, name='employerLogin'),
     path('employer/signup', employerSignUpView, name='employerSignup'),
-    path('candidate/signup',candidateSignUpView, name='candidateSignup'),
-    path('', candidateLoginView, name='candidateLogin'),
+    path('applicant/signup',candidateSignUpView, name='applicantSignup'),
+    path('applicant/login', candidateLoginView, name='applicantLogin'),
+    path('', candidateSignUpView, name='applicantSignup'),
 ]
