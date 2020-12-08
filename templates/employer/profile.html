@@ -1,4 +1,85 @@
 {% extends 'mainbase.html' %}
+{%block title%}
+    <a class="navbar-brand js-scroll-trigger" href="{%url 'employer'%}">BCR</a>
+{%endblock%}
 
+{% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profile'%}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
+{% endblock %}
 {% block  content%}
+<!-- Contact Section-->
+<section class="page-section" id="contact">
+    <div class="container">
+        <!-- Contact Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Company Profile</h2>
+        <!-- Icon Divider-->
+        <!-- Contact Section Form-->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
+                <form id="contactForm" name="sentMessage" novalidate="novalidate">
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>Company Name</label>
+                            <input class="form-control" id="companyName" type="text" placeholder="Company Name" required="required" data-validation-required-message="Please enter your Company Name." />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>Email</label>
+                            <input class="form-control" id="email" type="email" placeholder="Email" required="required" data-validation-required-message="Please enter your Email." />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>Password</label>
+                            <input class="form-control" id="password" type="text" placeholder="Password" required="required" data-validation-required-message="Please enter a Password." />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>Address</label>
+                            <input class="form-control" id="address" type="text" placeholder="Address" required="required" data-validation-required-message="Please enter your Address."/>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label for="size">Size</label>
+                            <select name="size" id="size" class="form-control">
+                                <option value="volvo">--Size--</option>
+                                <option value="MC">MC</option>
+                                <option value="BG">BG</option>
+                                <option value="MD">MD</option>
+                                <option value="ST">ST</option>
+                            </select>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label for="sector">Sector</label>
+                            <select name="sector" id="sector" class="form-control">
+                                <option value="volvo">--Sector--</option>
+                                <option value="PT">PT</option>
+                                <option value="VA">VA</option>
+                                <option value="GD">GD</option>
+                                <option value="MA">MA</option>
+                                <option value="DM">DM</option>
+                            </select>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <br />
+                    <div id="success"></div>
+                    <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Send</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock  %}

@@ -1,8 +1,23 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Listing, Skill
+from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Listing, SavedListing, Skill
+#from django_globals import globals 
+# from login.users import current_user
+# from login.users import set_user
 
+def getUserInfo():
+    file = open('current_user.txt', 'r')
+    current_user =  int(file.readline())
+    return current_user
+
+def setUserInfo(user_id):
+    file = open('current_user.txt', 'w')
+    file.write(str(user_id))
+    file.close()
+
+
+#current_user = users
 #This function gets the max values for n values in a dictionary
 def getMax(dict):
 
@@ -11,16 +26,13 @@ def getMax(dict):
     if len(dict) < NUM_APPLICANTS:
         for i in range (0, len(dict)):
             key_max = max(dict, key=dict.get)
-            print(dict[key_max])
             best_applicants.append(key_max)
             del dict[key_max]
     else:
         for i in range (0, NUM_APPLICANTS):
             key_max = max(dict, key=dict.get)
-            print(dict[key_max])
             best_applicants.append(key_max)
             del dict[key_max]
-    print(best_applicants)
     return best_applicants
 
 def listingScore(listing_dict, app_skill_dict):
@@ -109,20 +121,18 @@ def applicantScore(applicant_dict, preferred_dict):
 
     
 def applicantPageView(request):
-    l = Listing.objects.all()
+    user = getUserInfo()
+    recommended_listings = scoreListings(user)
     listings = []
-    for i in l:
-        listings.append(i)
-    listings = listings[0:20]
+    for listing in recommended_listings:  
+        listings.append(Listing.objects.get(id=listing))
     skills = PreferredSkill.objects.all()
-        
     
     context = {
         'listings' : listings,
         'skills' : skills
     }
     
-    print('test')
     return render(request, "applicant/landing.html", context)
 
 def searchListings(request):
@@ -148,41 +158,31 @@ def searchListings(request):
     }
     return redirect('applicant')
 
+def saveListing(request):
+    user = getUserInfo()
+    listingid = request.POST.get('id')
+    print('-------------id-----------------',listingid)
+    listing = Listing.objects.get(id=listingid)
+    applicant = Applicant.objects.get(id=user)
+    print('-------------app-----------------',applicant)
+    savedListing = SavedListing(listing = listing, applicant = applicant)
+    savedListing.save()
+    return redirect('applicant')
 
 def addProfile(request):
 
-    print('------------------PROFILE INFORMATION-----------------------\n')
-    
-    print('----------------EMAIL------------------\n')
-    email = request.POST.get("email")
-    print(email, '\n')
-    
-    print('----------------USERNAME------------------')
-    
+    email = request.POST.get("email") 
     username = request.POST.get("username")
-
-    print(username, '\n')
-    print('----------------FIRSTNAME------------------')
     first_name = request.POST.get("first_name")
-
-    print(first_name, '\n')
-    print('----------------LASTNAME------------------')
     last_name = request.POST.get("last_name")
-    print(last_name, '\n')
-    print('----------------PASSWORD------------------')
     password = request.POST.get("password")
-    print(password, '\n')
 
-    print('----------------LATEST ID--------------------')
-    print(Applicant.objects.latest('id').id)
-
-
-
-
-    app = Applicant(id = Applicant.objects.latest('id').id + 1, email=email, username=username, first_name = first_name, last_name=last_name, password='password')
+    app = Applicant(email=email, username=username, first_name = first_name, last_name=last_name, password='password')
     app.save()
-
     
+    user = Applicant.objects.get(username = username, password = 'password')
+    setUserInfo(user.id)
+
     return redirect("appSkills")
 
 
@@ -199,32 +199,45 @@ def editProfile(request):
 
     
 def skillsPageView(request):
-    app_id = 2
+    app_id = getUserInfo()
     s = ApplicantSkill.objects.all()
     skills = []
     for i in s:
         if i.applicant.id == app_id:
             skills.append(i)
+    dropdown = Skill.objects.all()
     print(len(skills))
     context = {
-        'skills' : skills
+        'skills' : skills,
+        'dropdown' : dropdown
     }
     return render(request, "applicant/skills.html", context)
 
 def addSkills (request) :
-    
-    skill_id = request.get.post("skill")
-    user_id = ''
-    level = request.get.post("level")
-    appSkill = ApplicantSkill(level=level, user_id=user_id, skill_id=skill_id)
-    appSkill.save()
-    return redirect("skills")
+    skill = request.POST.get('skill')
+    skill_obj = Skill.objects.get(id=skill)
+    level = request.POST.get('level')
+    userID = getUserInfo()
+
+    app = ApplicantSkill(applicant = Applicant.objects.get(id = userID), skill = skill_obj, skill_level = level)
+    app.save()
+    return redirect("appSkills")
 
 def deleteSkills (request) :
-    
-    id= ''
-    deleteSkills = ApplicantSkill.objects.get(id=id)
-    deleteSkills.delete()
+    app_skill = request.POST.get('del')
+    userid = getUserInfo()
+    print('---------skill=-----',app_skill)
+    user = Applicant.objects.get(id=userid)
+    print('----------user---------',user)
+    skill = Skill.objects.get(name=app_skill)
+    print(app_skill)
+    del_obj = ApplicantSkill.objects.get(applicant = user,skill=skill)
+    print(del_obj)
+    #app_skill.delete()
+    #deleteSkills = ApplicantSkill.objects.get(id=id)
+    #deleteSkills.delete()
+    print('--------------del-------------------')
+    return redirect('appSkills')
 
 def resumePageView(request):
     return render(request, "applicant/resume.html")
@@ -232,8 +245,30 @@ def resumePageView(request):
 def profilePageView(request):
     return render(request, "applicant/profile.html")
 
+def savedListingsPageView (request):
+    userid = getUserInfo()
+    user = Applicant.objects.get(id=userid)
+    savedListings = SavedListing.objects.filter(applicant=user)
+    skills = PreferredSkill.objects.all()
+    listings = savedListings
+    context = {
+        'listings' : listings,
+        'skills' : skills
+    }
+    return render(request, "applicant/savedlistings.html")
+
+def unsaveListing(request):
+    userid = getUserInfo()
+    applicant = Applicant.objects.get(id=userid)
+    listingid = request.POST.get('listingid')
+    listing = Listing.objects.get(id=listingid)
+    
+    del_sl = SavedListing.objects.get(listing=listing,applicant=applicant)
+    del_sl.delete()
+    return redirect('savedListings')
+
 def createScore(request): #Add the listingId as a parameter
-    specific_listing_id = 172
+    specific_listing_id = 100172
     #add the preferred skill ID's to the ids list. This will 
     #be used to query the matching applicants
     ids = []
@@ -269,8 +304,8 @@ def createScore(request): #Add the listingId as a parameter
         output += f'#{i+1} ApplicantID: ' + str(applicant) + '<br>'
     return HttpResponse(output)
 
-def scoreListings(request):
-    specific_applicant_id = 50
+def scoreListings(user):
+    specific_applicant_id = 100050
     ids = []
     applicant_skills = ApplicantSkill.objects.filter(applicant_id = specific_applicant_id)
     for skill in applicant_skills:
@@ -306,4 +341,5 @@ def scoreListings(request):
     output = ''
     for i, listing in enumerate(top_listings):
         output += f'#{i+1} ListingID: ' + str(listing) + '<br>'
-    return HttpResponse(output)
+    return top_listings
+    # return HttpResponse(output)

@@ -11,6 +11,8 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerLogin' %}">Login</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerSignup' %}">Sign Up</a></li>
+
                     </ul>
                 </div>
             </div>
@@ -27,39 +29,40 @@
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                <form id="contactForm" name="sentMessage" novalidate="novalidate" action ="{% url 'employer' %}">
+                <form id="contactForm" name="sentMessage" novalidate="novalidate" method = "POST" action ="{% url 'addOrganization' %}">
+                {% csrf_token %}
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>Company Name</label>
-                            <input class="form-control" id="companyName" type="text" placeholder="Company Name" required="required" data-validation-required-message="Please enter your Company Name." />
+                            <input class="form-control" name = "companyName" id="companyName" type="text" placeholder="Company Name" required="required" data-validation-required-message="Please enter your Company Name." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>Email</label>
-                            <input class="form-control" id="email" type="email" placeholder="Email" required="required" data-validation-required-message="Please enter your Email." />
+                            <input class="form-control" name = "empEmail" id="email" type="email" placeholder="Email" required="required" data-validation-required-message="Please enter your Email." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>Password</label>
-                            <input class="form-control" id="password" type="text" placeholder="Password" required="required" data-validation-required-message="Please enter a Password." />
+                            <input class="form-control" name = "empPassword" id="password" type="text" placeholder="Password" required="required" data-validation-required-message="Please enter a Password." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>Address</label>
-                            <input class="form-control" id="address" type="text" placeholder="Address" required="required" data-validation-required-message="Please enter your Address."/>
+                            <input class="form-control" name = "empAddress" id="address" type="text" placeholder="Address" required="required" data-validation-required-message="Please enter your Address."/>
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label for="size">Size</label>
-                            <select name="size" id="size" class="form-control">
+                            <select name="empSize" id="size" class="form-control">
                                 <option value="volvo">--Size--</option>
                                 <option value="MC">MC</option>
                                 <option value="BG">BG</option>
@@ -72,7 +75,7 @@
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label for="sector">Sector</label>
-                            <select name="sector" id="sector" class="form-control">
+                            <select name="empSector" id="sector" class="form-control">
                                 <option value="volvo">--Sector--</option>
                                 <option value="PT">PT</option>
                                 <option value="VA">VA</option>

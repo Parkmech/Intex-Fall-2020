@@ -44,9 +44,10 @@
             <div class="container">
                <div class='container' style="display: flex;flex-wrap: wrap;">
                 {% for skill in skills %}
-                    <form class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
-                        <p style="margin: 0;">{{skill}}</p>
-                        <input type = 'Submit'  hidden class='btn'><i class="fas fa-times" style="padding-left: 5px;align-self: center"></i></input>
+                    <form class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'deleteSkills' %}">
+                        {% csrf_token %}
+                        <p style="margin: 0;">{{skill}}</p><input hidden value={{skill.name}} name = 'del' type='text'> 
+                        <button type = 'Submit'  class='btn'><i class="fas fa-times" style="padding-left: 5px;align-self: center"></i></button>
                     </form>
                 {% endfor %}
                </div>
@@ -55,21 +56,24 @@
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
                         <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                        <form id="addApplicantSkill" name="addApplicantSkill" novalidate="novalidate">
+                        <form id="addApplicantSkill" name="addApplicantSkill" novalidate="novalidate" method="POST" action = "{% url 'addSkills' %}" >
+                        {% csrf_token %}
+
                             <div class="control-group" >
                                 <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                     <label>Skill</label>
                                     <div style="display: flex;flex-wrap: nowrap;flex-direction: row;">
-                                        <input class="form-control" id="name" type="text" list = 'test' placeholder="Type Skill Here" required="required" data-validation-required-message="Please enter your name." style="max-width: 40%;"/>
+                                        <input name="skill" class="form-control" id="name" type="text" list = 'test' placeholder="Type Skill Here" required="required" data-validation-required-message="Please enter your name." style="max-width: 40%;"/>
                                         <div>
-                                            <input type="number" step="1" width="4rem" placeholder="level"  min="1" max="4"  value="1" />
+                                            <input name="level" type="number" step="1" width="4rem" placeholder="level"  min="1" max="4"  value="1" />
                                             <p style="font-size: .8rem;font-style: italic;">Specify your knowlege level 1 - 4</p>
                                         </div>
                                     </div>
                                     <datalist id="test">
-                                        <option value="Python">  
-                                        <option value="Azure">
-                                        <option value="Communication">
+                                        {% for skill in dropdown %}
+                                        <option value="{{skill.id|title}}">{{skill.name}}</option>
+                                        {% endfor %}
+                                        
                                     </datalist>
                                     <p class="help-block text-danger"></p>
                                 </div>

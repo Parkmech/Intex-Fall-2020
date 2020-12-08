@@ -5,7 +5,7 @@
 {%endblock%}
 {% block navigation %}
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicant' %}">Suggested Listings</a></li>
-    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'savedListings' %}">Saved Listings</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'savedListings'%}">Saved Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href=>Applications</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfile' %}">Profile</a></li>
 {% endblock %}
@@ -57,11 +57,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     
-                        <form method='POST' action="{% url 'saveListing' %}" >
-                            {% csrf_token %}
-                            <input hidden value='{{listing.id}}' name='id' >
-                            <button class='' type='submit' style='float:left !important'><i class="fas fa-heart"></i></button>
-                        </form>
+                        
                         <button class='close' type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"><i class="fas fa-times"></i></span>
                         </button>
@@ -88,9 +84,12 @@
                                             <i class="fas fa-times fa-fw"></i>
                                             Close Listing
                                         </button><p style='color:#f8f9fa'>------------------</p>
-                                        <button class="btn btn-primary">
-                                            Apply
-                                        </button>
+                                        <form method='POST' action="{% url 'unsaveListing' %}">
+                                            <input hidden value='{{listing.id}}' name='listingid'>
+                                            <button class="btn btn-primary" type='submit'>
+                                                Unsave Listing
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

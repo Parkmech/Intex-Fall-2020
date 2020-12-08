@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE, DO_NOTHING
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, integer_validator
-from django.db.models.fields import CharField, IntegerField
+from django.db.models.fields import AutoField, CharField, IntegerField
 from django.db.models.fields.related import ForeignKey
 
 # Create your models here.

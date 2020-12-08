@@ -3,10 +3,25 @@ from django import http
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from applicant.models import Applicant, ApplicantSkill, PreferredSkill, Listing, Skill
+from applicant.models import Applicant, ApplicantSkill, PreferredSkill, Listing, Skill, Organization
 
 
 # Create your views here.
+
+def addOrganization(request):
+    
+    company_name = request.POST.get("companyName") 
+    email = request.POST.get("empEmail")
+    password = request.POST.get("empPassword")
+    address = request.POST.get("empAddress")
+    size = request.POST.get("empSize")
+    sector = request.POST.get("empSector")
+
+    org = Organization(company_name = company_name, email = email, password = password, address = address, size=size, sector=sector)
+    org.save()
+
+    return redirect("employer")
+
 def employerPageView(request):
     A = Applicant.objects.all()
     applicants = []

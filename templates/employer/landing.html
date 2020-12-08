@@ -1,14 +1,15 @@
 {% extends 'landingbase.html' %}
 {% load static %}
 
+{%block title%}
+<a class="navbar-brand js-scroll-trigger" href="{%url 'employer'%}">BCR</a>
+{%endblock%}
+
+{% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profile'%}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
+{% endblock %}
 {% block listing_header %}
-<div>
-    <ul style='display:flex;text-decoration: underline;'>
-        <li class="nav-link"><a href='#'>Suggested Applicants</a></li>
-        <li class="nav-link"><a href='#'>Saved Applicants</a></li>
-        <li class="nav-link"><a href='#'>Offers Extended</a></li>
-    </ul>
-</div>
 {% endblock %}
 {% block dashboard %}
 <h1>Applicants</h1>
@@ -75,10 +76,15 @@
                                     {% endfor %}
                                     </div>
                                     <p class="mb-5">{{listing.description}}</p>
-                                    <button class="btn btn-primary" data-dismiss="modal">
-                                        <i class="fas fa-times fa-fw"></i>
-                                        Close Listing
-                                    </button>
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                        <button class="btn btn-primary" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close Listing
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            Apply
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

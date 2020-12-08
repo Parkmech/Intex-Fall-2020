@@ -67,9 +67,10 @@
                                         </div>
                                     </div>
                                     <datalist id="test">
-                                        <option value="Python">  
-                                        <option value="Azure">
-                                        <option value="Communication">
+                                        {% for skill in dropdown %}
+                                        <option value="{{skill.id}}">{{skill.id}}</option>
+                                        {% endfor %}
+                                        
                                     </datalist>
                                     <p class="help-block text-danger"></p>
                                 </div>
