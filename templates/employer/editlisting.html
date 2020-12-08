@@ -20,24 +20,25 @@
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
                 <form id="contactForm" name="createListing" novalidate="novalidate" method='POST' action="{% url 'editListing'%}">
                     {% csrf_token %}
+                    <input value="{{listing.id}}" name="id" hidden />
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>Job Title</label>
-                            <input class="form-control" name="job_title" value = {{listing.job_title}} id="jobTitle" type="text" placeholder="Job Title" required="required" data-validation-required-message="Please enter your phone number." />
+                            <input class="form-control" name="job_title" value = "{{listing.job_title}}" id="jobTitle" type="text" placeholder="Job Title" required="required" data-validation-required-message="Please enter your phone number." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>City</label>
-                            <input class="form-control" name="city" value = {{listing.city}} id="city" type="text" placeholder="City" required="required" data-validation-required-message="Please enter your phone number." />
+                            <input class="form-control" name="city" value = "{{listing.city}}" id="city" type="text" placeholder="City" required="required" data-validation-required-message="Please enter your phone number." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <label>Description</label>
-                            <input class="form-control" name="description" value = {{listing.description}} id="description" type="text" placeholder="Description" required="required" data-validation-required-message="Please enter your phone number." />
+                            <input class="form-control" name="description" value = "{{listing.description}}" id="description" type="textarea" rows="4" placeholder="Description" required="required" data-validation-required-message="Please enter your phone number." />
                             <p class="help-block text-danger"></p>
                         </div>
                     </div>

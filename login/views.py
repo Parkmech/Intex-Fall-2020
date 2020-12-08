@@ -30,7 +30,7 @@ def setUserInfo(user_id):
 
 def candidateLoginForm(request):
     username = request.POST.get('username')
-    password = 'password'
+    password = request.POST.get('password')
     user = Applicant.objects.get(username=username, password = password)
     setUserInfo(user.id)
     print('-------------------------LOGIN---------------------')
@@ -57,5 +57,8 @@ def employerSignUpView(request):
 
 def candidateSignUpView(request):
     return render(request, "login/candidatesignup.html")
+
+def applicationView(request):
+    return render(request, "login/.html")
 
 

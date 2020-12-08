@@ -17,8 +17,8 @@
 <div style='display:flex; flex-wrap: wrap; flex-direction: row'> 
 {% for listing in listings %}
     <!-- Portfolio Item 1-->
-    <a class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important;color:#212529" href="{% url 'suggestApp' listingid=listing.id %}">
-        <div class="portfolio-item mx-auto" style='background-color:#6c757d' data-toggle="modal" data-target="#portfolioModal{{listing.id}}">
+    <div class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important;" >
+        <a class="portfolio-item mx-auto" style='background-color:#6c757d;color:#212529' href="{% url 'suggestApp' listingid=listing.id %}" >
             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                 <div class="portfolio-item-caption-content text-center text-white"><h2>Suggest Applicants</h2></div>
             </div>
@@ -44,8 +44,23 @@
                         </div>
                 </div>
             </div>
+        </a>
+        <div style='display:flex;'>
+            <form method='POST' action="{% url 'editListingView'%}">
+                {% csrf_token %}
+                <input name='listingid' value='{{listing.id}}' type='text' hidden>
+                <button class='btn btn-primary' style='margin-top:10px'>edit</button>
+            </form>
+            <p style='color:#fff'>-----</p>
+            <button class='btn btn-primary' style='margin-top:10px'>view</button>
+            <p style='color:#fff'>-----</p>
+            <form method='POST' action="{% url 'deleteListing'%}">
+                {% csrf_token %}
+                <input name='listingid' value='{{listing.id}}' type='text' hidden>
+                <button class='btn btn-primary' style='margin-top:10px'>delete</button>
+            </form>
         </div>
-    </a>
+    </div>
 
 {% endfor %}
 </div>

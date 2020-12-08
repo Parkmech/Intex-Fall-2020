@@ -1,7 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Listing, SavedListing, Skill
+from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Listing, SavedListing, Skill, Application
 #from django_globals import globals 
 # from login.users import current_user
 # from login.users import set_user
@@ -326,6 +326,16 @@ def createScore(listing_id): #Add the listingId as a parameter
     print('--------------TOP APPLICANTS-----------------')
     print(top_applicants)
     return top_applicants
+
+def applicationView(request):
+    user = getUserInfo()
+    applicant = Applicant.objects.get(id=user)
+    
+    applications = Application.objects.filter(applicant=applicant)
+    context = {
+        'applications' : applications
+    }
+    return render(request, "applicant/application.html", context)
 
 def scoreListings(user):
     specific_applicant_id = 100050

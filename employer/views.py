@@ -6,9 +6,7 @@ from django import http
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from applicant.models import Applicant, ApplicantSkill, PreferredSkill, Listing, Skill, Organization
-
-
+from applicant.models import Applicant, ApplicantSkill, PreferredSkill, Listing, Skill, Organization, Application
 # Create your views here.
 
 def getMax(dict):
@@ -95,8 +93,7 @@ def createScore(listing_id): #Add the listingId as a parameter
                 applicants[applicant_skill.applicant.id][applicant_skill.skill.id] = applicant_skill.skill_level
     user_scores = applicantScore(applicants, preferred_dict)
     top_applicants, top_scores = getMax(user_scores)
-    print('--------------TOP APPLICANTS-----------------')
-    print(top_applicants)
+
     return top_applicants, top_scores
 
 def addOrganization(request):
@@ -114,10 +111,9 @@ def addOrganization(request):
     return redirect("employer")
 
 def employerPageView(request):
-    user = 100011
+    user = getEmployerInfo()
     employer = Organization.objects.get(id=user)
     listings = Listing.objects.filter(organization = employer)
-    print('-----listing count-------',len(listings))
     
     skills = ApplicantSkill.objects.all()
     
@@ -135,10 +131,8 @@ def suggestApp(request, listingid):
     
     appDict = {}
     for i, applicant in enumerate(applicantids):
-        print('---------------------------', i, '-->', applicant, '-->', appScores[i])
         appDict[applicant] = appScores[i]
             
-    print(appDict)
     for aid in applicantids:
         applicants.append(Applicant.objects.get(id=aid))
 
@@ -229,26 +223,85 @@ def createListing(request):
     return redirect('employer')
 
 def editListing(request):
-
-    status = request.POST.get("status")
-    job_title = request.POST.get("job_title")
-    city = request.POST.get("city")
-    description = request.POST.get("description")
-    organization = Organization.objects.get(id=getEmployerInfo())
+    listingid = request.POST.get('id')
     contract = request.POST.get("contract")
     contract = Contract.objects.get(type=contract)
+    organization = Organization.objects.get(id=getEmployerInfo())
 
-    createList = Listing(status=status, job_title=job_title, city=city, description = description, organization = organization, contract=contract)
-    createList.save()
+    editList = Listing.objects.get(id=listingid)
+    
+    editList.status = request.POST.get("status")
+    editList.job_title = request.POST.get("job_title")
+    editList.city = request.POST.get("city")
+    editList.description = request.POST.get("description")
+    editList.organization = organization
+    editList.contract = contract
+    editList.save()
 
     return redirect('employer')
 
 def deleteListing(request):
-    id = ''
-    deleteListing = Listing.objects.get(id=id)
+    listingid = request.POST.get('listingid')
+    deleteListing = Listing.objects.get(id=listingid)
     deleteListing.delete()
+    return redirect('employer')
 
 def employerEditView(request):
-    return render(request, "employer/editlisting.html")
+    listingid = request.POST.get('listingid')
+    listing = Listing.objects.get(id=listingid)
+    context = {
+        'listing' : listing,
+    }
+    return render(request, "employer/editlisting.html", context)
+
+def matchbox(request):
+
+    import urllib
+    from  urllib import request
+    # If you are using Python 3+, import urllib instead of urllib2
+    import json 
+
+    print('-----------------------------------', 'INPUTS')
+    data = {
+            "Inputs": {
+                    "input1":
+                    [
+                        {
+                                'user_id': "100090",      
+                        }
+                    ],
+            },
+        "GlobalParameters":  {
+        }
+    }
+
+    body = str.encode(json.dumps(data))
+    
+    url = 'https://ussouthcentral.services.azureml.net/workspaces/a8edf043f79741ce9a6e68aa93e3270d/services/1dec62180cd34263b1a0027f0100b3b8/execute?api-version=2.0&format=swagger'
+    api_key = 'xIwALjzfLRpstOGYQZuIzb4uzi3IvnQdaWBq698VnhahFlWOqYQpZzsagF63FMoJKYZOjxao4GDEWogRFUNSmQ=='
+    # Replace this with the API key for the web service
+    headers = {'Content-Type':'application/json', 'Authorization':('Bearer '+ api_key)}
+    
+    req = urllib.request.Request(url, body, headers) 
+    req.method = "POST"
+    response = request.urlopen(req)
+
+        # If you are using Python 3+, replace urllib2 with urllib.request in the above code:
+        # req = urllib.request.Request(url, body, headers) 
+        # response = urllib.request.urlopen(req)
+
+    result = response.read()
+    result = json.loads(result)
+      
+    idList = []
+    output = '<b>Recommended Users for <u>100090</u>:</b>' + '<br><br>'
+    for i in range(0, 10):
+
+        output += f'User {i + 1}: ' + result['Results']['output1'][0]['Related User ' + str(i+1)] + '<br>'
+        idList.append(result['Results']['output1'][0]['Related User ' + str(i+1)])
+        
+    return HttpResponse(output)
+
+
 
 

@@ -3,7 +3,7 @@ from django.urls import path
 from .views import addProfile, applicantPageView, \
     createScore, editProfile, resumePageView, saveListing, skillsPageView, profilePageView,\
     createScore, scoreListings, searchListings, addProfile, addSkills, \
-        deleteSkills, savedListingsPageView, unsaveListing, profileEditPageView
+        deleteSkills, savedListingsPageView, unsaveListing, profileEditPageView, applicationView
 
 urlpatterns = [
     path('resume/', resumePageView, name='resume'),
@@ -19,4 +19,5 @@ urlpatterns = [
     path('savedListings/unsaveListing', unsaveListing, name='unsaveListing'),
     path('savedListings', savedListingsPageView, name='savedListings'),
     path('', applicantPageView, name='applicant'),
+    path('application/', applicationView, name='application')
 ]

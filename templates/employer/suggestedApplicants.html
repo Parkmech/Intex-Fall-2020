@@ -80,12 +80,12 @@
                                     <div style='display:flex;flex-wrap:wrap'>
                                     {% for skill in skills %}
                                     {% if skill.applicant == applicant %}
-                                        {% if skill.level > 4%}
-                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
-                                                <p style="margin: 0;">{{skill.skill.name}} - 4</p>
+                                        {% if skill.skill_level > 4 %}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" >
+                                                <p style="margin: 0;">{{skill.skill.name | title}} - 4</p>
                                             </div>
                                         {% else %}
-                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex">
                                                 <p style="margin: 0;">{{skill}}</p>
                                             </div>
                                         {% endif %}
