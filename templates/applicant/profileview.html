@@ -14,45 +14,51 @@
     <div class="container">
         <!-- Contact Section Heading-->
         <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">User Profile</h2>
+        <center><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfile' %}">Edit Profile</a>
+        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appSkills' %}">Add Skills</a></center>
         <!-- Icon Divider-->
         <!-- Contact Section Form-->
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                <form id="contactForm" name="sentMessage" novalidate="novalidate" method='POST' action="{% url 'editAppProfile'%}">
-                    {% csrf_token %}
+                <form id="contactForm" name="sentMessage" novalidate="novalidate">
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                            <label>First Name</label>
-                            <input class="form-control" name="appFirst" value="{{applicant.first_name}}" id="appFirst" type="tel" placeholder="First Name" required="required" data-validation-required-message="Please enter your phone number." />
-                            <p class="help-block text-danger"></p>
+                            <h6>First Name</h6>
+                            <p>{{applicant.first_name}}</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                            <label>Last Name</label>
-                            <input class="form-control" name="appLast" value="{{applicant.last_name}}" id="message" rows="5" placeholder="Last Name" required="required" data-validation-required-message="Please enter a message."/>                            <p class="help-block text-danger"></p>
-                            <p class="help-block text-danger"></p>
+                            <h6>Last Name</h6>
+                            <p>{{applicant.last_name}}</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                            <label>Password</label>
-                            <input class="form-control" name="appPassword" value="{{applicant.password}}" id="message" rows="5" placeholder="Password" required="required" data-validation-required-message="Please enter a message."/>                            <p class="help-block text-danger"></p>
-                            <p class="help-block text-danger"></p>
+                            <h6>Username</h6>
+                            <p>{{applicant.username}}</p>                    
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                            <label>Add Resume</label>
-                            <h7 class="control-group">Add Resume</h7>
-                            <div class="form-group"><input class="btn btn-primary btn-xl" id="name" type="file" placeholder="Resume" required="required"/>
-                            <p class="help-block text-danger"></p>
+                            <h6>Password</h6>
+                            <p>{{applicant.password}}</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <h6>Email</h6>
+                            <p>{{applicant.email}}</p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <h6>Resume</h6>
+                            <p>Resume</p>
                         </div>
                     </div>
                     <br />
-                    <div id="success"></div>
-                    <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Save</button></div>
                 </form>
             </div>
         </div>

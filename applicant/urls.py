@@ -1,20 +1,20 @@
 from os import name
 from django.urls import path
 from .views import addProfile, applicantPageView, \
-    createScore, resumePageView, saveListing, skillsPageView, profilePageView,\
+    createScore, editProfile, resumePageView, saveListing, skillsPageView, profilePageView,\
     createScore, scoreListings, searchListings, addProfile, addSkills, \
-        deleteSkills, savedListingsPageView, unsaveListing
+        deleteSkills, savedListingsPageView, unsaveListing, profileEditPageView
 
 urlpatterns = [
     path('resume/', resumePageView, name='resume'),
     path('skills/', skillsPageView, name='appSkills'),
     path('skills/add', addSkills, name='addSkills'),
+    path('profile/edit', editProfile, name='editAppProfile'),
     path('skills/delete', deleteSkills,name= 'deleteSkills'),
-    path('profile/', profilePageView, name='appProfile'),
+    path('editprofile/', profileEditPageView, name='appProfile'),
+    path('profile/', profilePageView, name='appProfileView'),
     path('search/', searchListings, name='applicantSearch'),
-    path('addProfile/', addProfile, name='addProfile'),
-    # path('appSignin/', appSignin, name='appSignin'),
-        
+    path('addProfile/', addProfile, name='addProfile'),  
     path('savelisting/', saveListing, name='saveListing'),
     path('savedListings/unsaveListing', unsaveListing, name='unsaveListing'),
     path('savedListings', savedListingsPageView, name='savedListings'),

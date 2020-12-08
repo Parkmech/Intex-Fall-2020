@@ -1,0 +1,114 @@
+{% extends 'landingbase.html' %}
+{% load static %}
+
+{%block title%}
+<a class="navbar-brand js-scroll-trigger" href="{%url 'employer'%}">BCR</a>
+{%endblock%}
+
+{% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profileView' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>
+{% endblock %}
+{% block listing_header %}
+    <div style='display:flex;flex-wrap:wrap'>
+        <h4 style='align-self:center'>Preferred Skills</h4><p style='color:#fff'>--------</p>
+        {% for pSkill in preferredSkills %}
+            <button class='btn btn-primary' style='margin-bottom:.5rem'>{{pSkill}}</button>
+            <p style='color:#fff'>-----</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block dashboard %}
+<h1>Suggested Applicants for {{listing}}</h1>
+<div style='display:flex; flex-wrap: wrap; flex-direction: row'> 
+{% for applicant in applicants %}
+    <!-- Portfolio Item 1-->
+
+    <div class="portfolio-item mx-auto" style='margin: .5rem !important; margin-bottom: .5rem !important; max-width: 20rem;min-width: 20rem; background-color:#6c757d; padding:1rem !important;  display:flex; flex-wrap:wrap; flex-direction:row' data-toggle="modal" data-target="#portfolioModal{{applicant.id}}">
+        
+        <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
+        <div style='magrin:0 !important'>
+            <h3>{{applicant}}</h3>
+            <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
+                
+                <div style='display:flex;flex-direction:column;padding-left:10px'>
+                    {% for key, value in appDict.items %}
+                    {% if applicant.id == key %}
+                        {% if value > 0 %}
+                            <h5>Applicant Score: +{{value}}</h5>
+                        {% else %}
+                            <h5>Applicant Score: {{value}}</h5>
+                        {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+{% endfor %}
+</div>
+                    
+{% endblock %}
+{% block popups %}
+    {% for applicant in applicants %}
+    <!-- Portfolio Modals-->
+        <div class="portfolio-modal modal fade" id="portfolioModal{{applicant.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary mb-0" id="portfolioModal1Label">{{applicant}}</h2>
+                                    <br>
+                                    <h4>{{applicant.email}}</h4>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+        
+                                    <!-- Portfolio Modal - Text-->
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                    {% for skill in skills %}
+                                    {% if skill.applicant == applicant %}
+                                        {% if skill.level > 4%}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                                <p style="margin: 0;">{{skill.skill.name}} - 4</p>
+                                            </div>
+                                        {% else %}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                                <p style="margin: 0;">{{skill}}</p>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}   
+                                    {% endfor %}
+                                    </div>
+                                   <!-- <p class="mb-5">{{listing.description}}</p> -->
+                                   <br>
+                                   <br>
+                                   <br>
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                        <button class="btn btn-primary" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close Listing
+                                        </button>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

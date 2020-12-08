@@ -7,7 +7,7 @@
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicant' %}">Suggested Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'savedListings'%}">Saved Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href=>Applications</a></li>
-    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfile' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfileView' %}">Profile</a></li>
 {% endblock %}
 {% block listing_header %}
 {% endblock %}
@@ -85,6 +85,7 @@
                                             Close Listing
                                         </button><p style='color:#f8f9fa'>------------------</p>
                                         <form method='POST' action="{% url 'unsaveListing' %}">
+                                            {% csrf_token %}
                                             <input hidden value='{{listing.id}}' name='listingid'>
                                             <button class="btn btn-primary" type='submit'>
                                                 Unsave Listing

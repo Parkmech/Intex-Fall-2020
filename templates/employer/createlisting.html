@@ -1,5 +1,119 @@
 {% extends 'mainbase.html' %}
-
+{%block title%}
+    <a class="navbar-brand js-scroll-trigger" href="{%url 'applicant'%}">BCR</a>
+{%endblock%}
+{% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profileView' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>
+{% endblock %}
 {% block  content%}
-<p>test<p>
+<!-- Contact Section-->
+<section class="page-section" id="contact">
+    <div class="container">
+        <!-- Contact Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Create Listing</h2>
+        <!-- Icon Divider-->
+        <!-- Contact Section Form-->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
+                <form id="contactForm" name="createListing" novalidate="novalidate" method='POST' action="{% url 'createListingFunc'%}">
+                    {% csrf_token %}
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>Job Title</label>
+                            <input class="form-control" name="job_title" id="jobTitle" type="text" placeholder="Job Title" required="required" data-validation-required-message="Please enter your phone number." />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>City</label>
+                            <input class="form-control" name="city" id="city" type="text" placeholder="City" required="required" data-validation-required-message="Please enter your phone number." />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
+                            <label>Description</label>
+                            <input class="form-control" name="description" id="description" type="text" placeholder="Description" required="required" data-validation-required-message="Please enter your phone number." />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                            <label for="contract">Contract</label>
+                            <select name="contract" id="contract" class="form-control">
+                                <option value="contract">--Contract--</option>
+                                <option value="Stage6Mois">Stage6Mois</option>
+                                <option value="CDI">CDI</option>
+                                <option value="Stage4mois">Stage4mois</option>
+                                <option value="Stage7mois">Stage7mois</option>
+                                <option value="Stage3mois">Stage3mois</option>
+                                <option value="Stage8mois">Stage8mois</option>
+                                <option value="CDD6mois">CDD6mois</option>
+                                <option value="CDD4mois">CDD4mois</option>
+                                <option value="CDD13mois">CDD13mois</option>
+                                <option value="CDD3mois">CDD3mois</option>
+                                <option value="CDD5mois">CDD5mois</option>
+                                <option value="CDD18mois">CDD18mois</option>
+                                <option value="Intérim6mois">Intérim6mois</option>
+                                <option value="Intérim4mois">Intérim4mois</option>
+                                <option value="Intérim18mois">Intérim18mois</option>
+                                <option value="Intérim9mois">Intérim9mois</option>                                
+                                <option value="Intérim3mois">Intérim3mois</option>
+                                <option value="CDD12mois">CDD12mois</option>
+                                <option value="Indépendant/Freelance">Indépendant/Freelance</option>
+                                <option value="Apprentissage/Alternance6mois">Apprentissage/Alternance6mois</option>
+                                <option value="Franchises">Franchises</option>
+                                <option value="Intérim7mois">Intérim7mois</option>
+                                <option value="CDD9mois">CDD9mois</option>
+                                <option value="Intérim12mois">Intérim12mois</option>
+                                <option value="Intérim5mois">Intérim5mois</option>
+                                <option value="CDD14mois">CDD14mois</option>
+                                <option value="CDD8mois">CDD8mois</option>
+                                <option value="Intérim24mois">Intérim24mois</option>
+                                <option value="Intérim8mois">Intérim8mois</option>
+                                <option value="CDD7mois">CDD7mois</option>
+                                <option value="Stage1mois">Stage1mois</option>
+                                <option value="Intérim15mois">Intérim15mois</option>
+                                <option value="Intérim1mois">Intérim1mois</option>
+                                <option value="CDD10mois">CDD10mois</option>
+                                <option value="Intérim2mois">Intérim2mois</option>
+                                <option value="Apprentissage/Alternance24mois">Apprentissage/Alternance24mois</option>
+                                <option value="CDD1mois">CDD1mois</option>                                
+                                <option value="CDD2mois">CDD2mois</option>
+                                <option value="Stage12mois">Stage12mois</option>
+                                <option value="Stage2mois">Stage2mois</option>
+                                <option value="Contractuel">Contractuel</option>                               
+                                <option value="Apprentissage/Alternance12mois">Apprentissage/Alternance12mois</option>
+                                <option value="CDD11mois">CDD11mois</option>
+                                <option value="CDD24mois">CDD24mois</option>
+                                <option value="CDD15mois">CDD15mois</option>
+                                <option value="Stage5mois">Stage5mois</option>
+                                <option value="Stage">Stage</option>                                
+                                <option value="CDD36mois">CDD36mois</option>
+                                <option value="Apprentissage/Alternance">Apprentissage/Alternance</option>
+                                <option value="CDD60mois">CDD60mois</option>
+                                <option value="Stage9mois">Stage9mois</option>    
+                            </select>
+                            <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
+                            <label for="status">Status</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="status">--Status--</option>
+                                <option value="published">Published</option>
+                                <option value="Offered">Offered</option>
+                            </select>
+                            <p class="help-block text-danger"></p>
+                    </div>
+                    <br />
+                    <div id="success"></div>
+                    <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Create</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock  %}

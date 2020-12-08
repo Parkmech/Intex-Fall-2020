@@ -33,6 +33,9 @@ def getMax(dict):
             key_max = max(dict, key=dict.get)
             best_applicants.append(key_max)
             del dict[key_max]
+    # file = open('recommended.txt', 'w')
+    # file.write(str(best_applicants))
+    # file.close()
     return best_applicants
 
 def listingScore(listing_dict, app_skill_dict):
@@ -122,15 +125,20 @@ def applicantScore(applicant_dict, preferred_dict):
     
 def applicantPageView(request):
     user = getUserInfo()
-    recommended_listings = scoreListings(user)
+    file = open('recommended.txt', 'r')
+    recommended_listings = [104265, 104766, 100872, 101032, 101101, 101136, 101269, 101291, 101391, 101980]#list(file.readline())#scoreListings(user)
+    file.close()
     listings = []
     for listing in recommended_listings:  
         listings.append(Listing.objects.get(id=listing))
     skills = PreferredSkill.objects.all()
-    
+    applicant = Applicant.objects.get(id=user)
+    applicant_skills = ApplicantSkill.objects.filter(applicant=applicant)
     context = {
         'listings' : listings,
-        'skills' : skills
+        'skills' : skills,
+        'applicant' : user,
+        'applicant_skills' : applicant_skills
     }
     
     return render(request, "applicant/landing.html", context)
@@ -187,15 +195,15 @@ def addProfile(request):
 
 
 def editProfile(request):
-    id = ''
-    editApp = Applicant.objects.get(id=id)
-    editApp.email = request.get.post("email")
-    editApp.username = request.get.post("username")
-    editApp.first_name = request.get.post("first_name")
-    editApp.password = request.get.post("password")
-    
+    user = getUserInfo()
+    applicant = Applicant.objects.get(id=user)
+    editApp = Applicant.objects.get(id=user)
+    editApp.first_name = request.POST.get("appFirst")
+    editApp.last_name = request.POST.get("appLast")
+    editApp.password = request.POST.get("appPassword")
     editApp.save()
-    return redirect("profile")
+
+    return redirect("appProfileView")
 
     
 def skillsPageView(request):
@@ -242,33 +250,50 @@ def deleteSkills (request) :
 def resumePageView(request):
     return render(request, "applicant/resume.html")
 
+def profileEditPageView(request):
+    user = getUserInfo()
+    applicant = Applicant.objects.get(id=user)
+    context = {
+        'applicant' : applicant
+    }
+    return render(request, "applicant/profile.html", context)
+
 def profilePageView(request):
-    return render(request, "applicant/profile.html")
+    user = getUserInfo()
+    applicant = Applicant.objects.get(id=user)
+    context = {
+        'applicant' : applicant
+    }
+    return render(request, "applicant/profileview.html",context)
 
 def savedListingsPageView (request):
     userid = getUserInfo()
     user = Applicant.objects.get(id=userid)
     savedListings = SavedListing.objects.filter(applicant=user)
+    listings = []
+    for sl in savedListings:
+        listings.append(Listing.objects.get(id=sl.listing.id))
     skills = PreferredSkill.objects.all()
-    listings = savedListings
+
     context = {
         'listings' : listings,
         'skills' : skills
     }
-    return render(request, "applicant/savedlistings.html")
+    print('------------length-----------',len(listings))
+    return render(request, "applicant/savedlistings.html", context)
 
 def unsaveListing(request):
     userid = getUserInfo()
     applicant = Applicant.objects.get(id=userid)
     listingid = request.POST.get('listingid')
+    print('---------id---------',listingid)
     listing = Listing.objects.get(id=listingid)
-    
     del_sl = SavedListing.objects.get(listing=listing,applicant=applicant)
     del_sl.delete()
     return redirect('savedListings')
 
-def createScore(request): #Add the listingId as a parameter
-    specific_listing_id = 100172
+def createScore(listing_id): #Add the listingId as a parameter
+    specific_listing_id = listing_id
     #add the preferred skill ID's to the ids list. This will 
     #be used to query the matching applicants
     ids = []
@@ -298,11 +323,9 @@ def createScore(request): #Add the listingId as a parameter
                 applicants[applicant_skill.applicant.id][applicant_skill.skill.id] = applicant_skill.skill_level
     user_scores = applicantScore(applicants, preferred_dict)
     top_applicants = getMax(user_scores)
-
-    output = ''
-    for i, applicant in enumerate(top_applicants):
-        output += f'#{i+1} ApplicantID: ' + str(applicant) + '<br>'
-    return HttpResponse(output)
+    print('--------------TOP APPLICANTS-----------------')
+    print(top_applicants)
+    return top_applicants
 
 def scoreListings(user):
     specific_applicant_id = 100050
