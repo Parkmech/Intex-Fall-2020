@@ -53,7 +53,9 @@
                 <button class='btn btn-primary' style='margin-top:10px'>edit</button>
             </form>
             <p style='color:#fff'>-----</p>
+            <div data-toggle="modal" data-target="#portfolioModal{{listing.id}}">
             <button class='btn btn-primary' style='margin-top:10px'>view</button>
+            </div>
             <p style='color:#fff'>-----</p>
             <form method='POST' action="{% url 'deleteListing'%}">
                 {% csrf_token %}
@@ -66,4 +68,79 @@
 {% endfor %}
 </div>
                     
+{% endblock %}
+{% block popups %}
+    <!--Listing is the list of recommended listings (10 of them)-->
+    {% for listing in listings %}
+    <!-- Portfolio Modals-->
+        <div class="portfolio-modal modal fade" id="portfolioModal{{listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    
+                        <form method='POST' action="{% url 'saveListing' %}" >
+                            {% csrf_token %}
+                            <input hidden value='{{listing.id}}' name='id' >
+                            <button class='' type='submit' style='float:left !important'><i class="fas fa-heart"></i></button>
+                        </form>
+                        <button class='close' type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                        </button>
+                    
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">{{listing}}</h2>
+                                    <div >
+                                        <h3>{{listing.organization}}</h3>
+                                         
+                                    </div>
+                                    <h6>in {{listing.city}}</h6>
+                                    <form method='POST' action="{% url 'applyToJob' %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-primary" type="submit">
+                                                Apply
+                                        </button> 
+                                    </form>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+                                                                      <!-- Portfolio Modal - Text-->
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                    {% for skill in skills %}
+                                    {% if skill.listing == listing %}
+                                        {% if skill in applicant_skills %}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                                <p style="margin: 0;">{{skill}}</p>
+                                            </div>
+                                        {% else %}
+                                            <div class = 'btn btn-primary' style="border-color:#ffc107;background-color:#ffc107;margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                                <p style="margin: 0;">{{skill}}</p>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}   
+                                    {% endfor %}
+                                    </div>
+                                    <br>
+
+                                    <p class="mb-5">{{listing.description}}</p>
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                        <button class="btn btn-primary" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close Listing
+                                        </button><p style='color:#f8f9fa'>------------------</p>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

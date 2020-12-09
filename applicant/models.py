@@ -11,8 +11,8 @@ class Applicant(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     password = models.CharField(max_length=100)
-    #resume = models.FileField(upload_to='files')
-    #photo = models.ImageField(upload_to = 'photos')
+    resume = models.FileField(upload_to='files', blank=True, null=True)
+    photo = models.ImageField(upload_to = 'photos', blank = True, null = True)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name

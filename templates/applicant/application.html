@@ -18,11 +18,10 @@
 {% for application in applications %}
     <!-- Portfolio Item 1-->
     <div class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important;" >
-        <div class="portfolio-item mx-auto" style='background-color:#6c757d;color:#212529' data-toggle="modal" data-target="#portfolioModal{{application.listing.id}}">
-            <!--<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                <div class="portfolio-item-caption-content text-center text-white" ><h2>View Details</h2></div>
-            </div>-->
-            <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
+        <div class="portfolio-item mx-auto" style='background-color:#6c757d' data-toggle="modal" data-target="#portfolioModal{{application.listing.id}}">
+            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                <div class="portfolio-item-caption-content text-center text-white"><h3>View Details</h3></div>
+            </div>
             <div style = 'padding:10px'>
                 <center><h5>{{application.listing.job_title}}</h5></center>
                 <div>
@@ -61,7 +60,6 @@
         <div class="portfolio-modal modal fade" id="portfolioModal{{application.listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
-                    
                     <button class='close' type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="fas fa-times"></i></span>
                     </button>
@@ -70,7 +68,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <center><h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">{{application}}</h2></center>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">{{application.listing.job_title}}</h2>
                                     <div >
                                         <center><h3>{{application.organization}}</h3></center>
                                     </div>
@@ -99,7 +97,7 @@
                                     {% endfor %}
                                     </div>
                                     <br>
-                                    <p class="mb-5">{{listing.description}}</p>
+                                    <p class="mb-5">{{application.listing.description}}</p>
                                     <div style='display:flex;flex-wrap:wrap'>
                                         <button class="btn btn-primary" data-dismiss="modal">
                                             <i class="fas fa-times fa-fw"></i>
@@ -114,5 +112,76 @@
             </div>
         </div>
 {% endfor %}
-{%endblock%}      
+{%endblock%}
+{% block popups %}
+    <!--Listing is the list of recommended listings (10 of them)-->
+    {% for application in applications %}
+    <!-- Portfolio Modals-->
+        <div class="portfolio-modal modal fade" id="portfolioModal{{application.listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                        <form method='POST' action="{% url 'saveListing' %}" >
+                            {% csrf_token %}
+                            <input hidden value='{{application.listing.id}}' name='id' >
+                            <button class='' type='submit' style='float:left !important'><i class="fas fa-heart"></i></button>
+                        </form>
+                        <button class='close' type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                        </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">{{application.listing.job_title}}</h2>
+                                    <br>
+                                    <div >
+                                        <h3>{{application.listing.organization}}</h3>
+                                         
+                                    </div>
+                                    <h6>in {{application.listing.city}}</h6>
+                                    <div >
+                                        <h4>Status: {{application.status}}</h4>
+                                    </div>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+                                                                      <!-- Portfolio Modal - Text-->
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                    {% for skill in skills %}
+                                    {% if skill.listing == listing %}
+                                        {% if skill in applicant_skills %}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                                <p style="margin: 0;">{{skill}}</p>
+                                            </div>
+                                        {% else %}
+                                            <div class = 'btn btn-primary' style="border-color:#ffc107;background-color:#ffc107;margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                                <p style="margin: 0;">{{skill}}</p>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}   
+                                    {% endfor %}
+                                    </div>
+                                    <br>
+
+                                    <p class="mb-5">{{listing.description}}</p>
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                        <button class="btn btn-primary" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close Listing
+                                        </button><p style='color:#f8f9fa'>------------------</p>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}    
  

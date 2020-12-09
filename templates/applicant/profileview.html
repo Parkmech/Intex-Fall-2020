@@ -44,12 +44,6 @@
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                            <h6>Password</h6>
-                            <p>{{applicant.password}}</p>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <h6>Email</h6>
                             <p>{{applicant.email}}</p>
                         </div>
@@ -57,7 +51,11 @@
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <h6>Resume</h6>
-                            <p>Resume</p>
+                            <!--<p>{{applicant.resume.url}}</p>-->
+                            <form method='POST' action="{% url 'downloadProfileResume'%}">
+                                <a href="{{applicant.resume.url}}" Download>Download</a>
+                                <input hidden name='id' value='applicant.id'> 
+                            </form>
                         </div>
                     </div>
                     <br />

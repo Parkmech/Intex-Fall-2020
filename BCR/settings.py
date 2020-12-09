@@ -119,3 +119,5 @@ STATICFILES_DIRS = [
        os.path.join(BASE_DIR, 'BCR/static')
 ]  
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
+MEDIA_URL = '/media/'

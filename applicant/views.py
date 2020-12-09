@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.http import FileResponse
 from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Listing, SavedListing, Skill, Application
 #from django_globals import globals 
 # from login.users import current_user
@@ -109,13 +110,18 @@ def applicantPageView(request):
     for listing in recommended_listings:  
         listings.append(Listing.objects.get(id=listing))
     skills = PreferredSkill.objects.all()
+    #Populate the listing Dictionary with each listing and their preferred skills
+
     applicant = Applicant.objects.get(id=user)
     applicant_skills = ApplicantSkill.objects.filter(applicant=applicant)
+    applicant_skill_ids = []
+    for item in applicant_skills:
+        applicant_skill_ids.append(item.skill)
     context = {
         'listings' : listings,
-        'skills' : skills,
         'applicant' : user,
-        'applicant_skills' : applicant_skills
+        'skills': skills,
+        'applicant_skills' : applicant_skill_ids
     }
     
     return render(request, "applicant/landing.html", context)
@@ -180,6 +186,11 @@ def editProfile(request):
 
     return redirect("appProfileView")
 
+def downloadProfileResume(request) :
+    applicant = Applicant.objects.get(id=request.POST.get('id'))
+    filename = applicant.resume.path
+    response = FileResponse(open(filename, 'rb'))
+    return response
     
 def skillsPageView(request):
     app_id = getUserInfo()

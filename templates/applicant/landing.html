@@ -49,9 +49,9 @@
     </div>
     {% endfor %}
     </div>
-                    
 {% endblock %}
 {% block popups %}
+    <!--Listing is the list of recommended listings (10 of them)-->
     {% for listing in listings %}
     <!-- Portfolio Modals-->
         <div class="portfolio-modal modal fade" id="portfolioModal{{listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
@@ -92,14 +92,14 @@
                                     <!-- Portfolio Modal - Image-->
                                                                       <!-- Portfolio Modal - Text-->
                                     <div style='display:flex;flex-wrap:wrap'>
-                                    {% for skill in skills %}
+                                    {% for skill in skills%}
                                     {% if skill.listing == listing %}
-                                        {% if skill in applicant_skills %}
-                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                        {% if skill.skill in applicant_skills %}
+                                            <div class = 'btn btn-primary' style="background-color: #4CAF50;margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
                                                 <p style="margin: 0;">{{skill}}</p>
                                             </div>
                                         {% else %}
-                                            <div class = 'btn btn-primary' style="border-color:#ffc107;background-color:#ffc107;margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                                            <div class = 'btn btn-primary' style="border-color:#000000;background-color:#808080;margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
                                                 <p style="margin: 0;">{{skill}}</p>
                                             </div>
                                         {% endif %}
