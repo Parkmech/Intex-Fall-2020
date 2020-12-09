@@ -6,9 +6,11 @@
 {%endblock%}
 
 {% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'empAbout' %}">About</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profileView' %}">Profile</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerLogin' %}">Sign Out</a></li>
 {% endblock %}
 {% block listing_header %}
 {% endblock %}
@@ -24,24 +26,23 @@
             </div>
             <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
             <div style = 'padding:10px'>
-                <h5>{{listing.job_title}}</h5>
-                <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
-                    <div style='max-width:55%'>
-                        
-                        <p>{{listing.organization}}</p>
-                        <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
+                <center><h5>{{listing.job_title}}</h5></center>
+                <div >
+                    <div>
+                        <center><p>{{listing.organization}}</p></center>
+                        {% comment %} <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
                             <div>
                                 <p>{{listing.description | truncatechars:100 }}</p>
                             </div> 
-                        </div>
+                        </div> {% endcomment %}
                     </div>
-                        <div style='display:flex;flex-direction:column;padding-left:10px'>
+                        {% comment %} <div style='display:flex;flex-direction:column;padding-left:10px'>
                             {% for skill in skills %}
                             {% if skill.listing == listing %}
                                 <span style = 'display:flex;flex-direction:row;'><p>{{ skill }}</p></span>
                             {% endif %}
                             {% endfor %}
-                        </div>
+                        </div> {% endcomment %}
                 </div>
             </div>
         </a>

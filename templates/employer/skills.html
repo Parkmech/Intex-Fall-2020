@@ -21,16 +21,18 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav" style='padding-top: .5rem; padding-bottom: .5rem';>
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
+                <a class="navbar-brand js-scroll-trigger" href="#page-top">BCR</a>
                 <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Portfolio</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">About</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Contact</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'empAbout' %}">About</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profileView' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerLogin' %}">Sign Out</a></li>
                     </ul>
                 </div>
             </div>
@@ -44,9 +46,12 @@
             <div class="container">
                <div class='container' style="display: flex;flex-wrap: wrap;">
                 {% for skill in skills %}
-                    <form class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'appSkills' %}">
+                    <form class = 'btn btn-primary' style="margin: 7px;display:flex" method='POST' action= "{% url 'deletePreferredSkills' %}">
+                        {% csrf_token %}
                         <p style="margin: 0;">{{skill}}</p>
-                        <input type = 'Submit'  hidden class='btn'><i class="fas fa-times" style="padding-left: 5px;align-self: center"></i></input>
+                        <input hidden name = 'listingid' value = '{{listing.id}}'  type='text'/>
+                        <input hidden name = 'skill' value = '{{skill.skill.name}}'  type='text'/>
+                        <button type = 'Submit'  class='btn'><i class="fas fa-times" style="padding-left: 5px;align-self: center"></i></button>
                     </form>
                 {% endfor %}
                </div>
@@ -55,29 +60,35 @@
                 <div class="row">
                     <div class="col-lg-8 mx-auto">
                         <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19.-->
-                        <form id="addApplicantSkill" name="addApplicantSkill" novalidate="novalidate">
+                        <form id="addApplicantSkill" name="addApplicantSkill" novalidate="novalidate" method='POST' action="{% url 'addPreferredskill'%}">
+                            {% csrf_token %}
                             <div class="control-group" >
                                 <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                     <label>Skill</label>
                                     <div style="display: flex;flex-wrap: nowrap;flex-direction: row;">
-                                        <input class="form-control" id="name" type="text" list = 'test' placeholder="Type Skill Here" required="required" data-validation-required-message="Please enter your name." style="max-width: 40%;"/>
+                                        <input class="form-control" id="name" name= 'skill' type="text" list = 'test' placeholder="Type Skill Here" required="required" data-validation-required-message="Please enter your name." style="max-width: 40%;"/>
                                         <div>
-                                            <input type="number" step="1" width="4rem" placeholder="level"  min="1" max="4"  value="1" />
+                                            <input type="number" name = 'level' step="1" width="4rem" placeholder="level"  min="1" max="4"  value="1" />
                                             <p style="font-size: .8rem;font-style: italic;">Specify your knowlege level 1 - 4</p>
                                         </div>
                                     </div>
                                     <datalist id="test">
-                                        {% for skill in dropdown %}
-                                        <option value="{{skill.id}}">{{skill.id}}</option>
+                                        {% for skill in skills_list %}
+                                        <option value="{{skill}}"></option>
                                         {% endfor %}
                                         
                                     </datalist>
                                     <p class="help-block text-danger"></p>
+                                    <input hidden name='listingid' value="{{listing.id}}" type='text' />
                                 </div>
                             </div>
                             <br />
                             <div id="success"></div>
-                            <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Add</button></div>
+                            <div class="form-group" style='display:flex;'>
+                                <button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Add</button>
+                                <p style='color:#f8f9fa'>--</p>
+                                <a class='btn btn-primary btn-xl' href="{% url 'employer'%}">Done</a>
+                            </div>
                         </form>
                     </div>
                 </div>

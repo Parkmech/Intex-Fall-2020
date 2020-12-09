@@ -3,9 +3,12 @@
     <a class="navbar-brand js-scroll-trigger" href="{%url 'applicant'%}">BCR</a>
 {%endblock%}
 {% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'empAbout' %}">About</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profileView' %}">Profile</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerLogin' %}">Sign Out</a></li>
+
 {% endblock %}
 {% block  content%}
 <!-- Contact Section-->
@@ -45,7 +48,7 @@
                             <label for="contract">Contract</label>
                             <select name="contract" id="contract" class="form-control">
                                 <option value="contract">--Contract--</option>
-                                <option value="Stage6Mois">Stage6Mois</option>
+                                <option value="Stage6mois">Stage6mois</option>
                                 <option value="CDI">CDI</option>
                                 <option value="Stage4mois">Stage4mois</option>
                                 <option value="Stage7mois">Stage7mois</option>

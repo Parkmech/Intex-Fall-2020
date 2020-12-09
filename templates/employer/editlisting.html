@@ -3,9 +3,12 @@
     <a class="navbar-brand js-scroll-trigger" href="{%url 'applicant'%}">BCR</a>
 {%endblock%}
 {% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'empAbout' %}">About</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'profileView' %}">Profile</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employer'%}">Listings</a></li>
-    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'createListing'%}">Create Listing</a></li>                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicantLogin' %}">Login</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerLogin' %}">Sign Out</a></li>
+
 {% endblock %}
 {% block  content%}
 <!-- Contact Section-->
@@ -45,58 +48,9 @@
                     <div class="control-group">
                             <label for="contract">Contract</label>
                             <select name="contract" id="contract" class="form-control">
-                                <option {% if listing.contract.type == 'contract' %} selected {% endif %} value="contract">--Contract--</option>
-                                <option {% if listing.contract.type == 'Stage6Mois' %} selected {% endif %}  value="Stage6Mois">Stage6Mois</option>
-                                <option {% if listing.contract.type == 'CDI' %} selected {% endif %} value="CDI">CDI</option>
-                                <option {% if listing.contract.type == 'Stage4mois' %} selected {% endif %} value="Stage4mois">Stage4mois</option>
-                                <option {% if listing.contract.type == 'Stage7mois' %} selected {% endif %} value="Stage7mois">Stage7mois</option>
-                                <option {% if listing.contract.type == 'Stage3Mois' %} selected {% endif %} value="Stage3mois">Stage3mois</option>
-                                <option {% if listing.contract.type == 'Stage8mois' %} selected {% endif %} value="Stage8mois">Stage8mois</option>
-                                <option {% if listing.contract.type == 'CDD6mois' %} selected {% endif %} value="CDD6mois">CDD6mois</option>
-                                <option {% if listing.contract.type == 'CDD4mois' %} selected {% endif %}  value="CDD4mois">CDD4mois</option>
-                                <option {% if listing.contract.type == 'CDD13mois' %} selected {% endif %}  value="CDD13mois">CDD13mois</option>
-                                <option {% if listing.contract.type == 'CDD3mois' %} selected {% endif %}  value="CDD3mois">CDD3mois</option>
-                                <option {% if listing.contract.type == 'CDD5mois' %} selected {% endif %}  value="CDD5mois">CDD5mois</option>
-                                <option {% if listing.contract.type == 'CDD18mois' %} selected {% endif %}  value="CDD18mois">CDD18mois</option>
-                                <option {% if listing.contract.type == 'Intérim6mois' %} selected {% endif %}  value="Intérim6mois">Intérim6mois</option>
-                                <option {% if listing.contract.type == 'Intérim4mois' %} selected {% endif %}  value="Intérim4mois">Intérim4mois</option>
-                                <option {% if listing.contract.type == 'Intérim18mois' %} selected {% endif %}  value="Intérim18mois">Intérim18mois</option>
-                                <option {% if listing.contract.type == 'Intérim9mois' %} selected {% endif %}  value="Intérim9mois">Intérim9mois</option>                                
-                                <option {% if listing.contract.type == 'Intérim3mois' %} selected {% endif %}  value="Intérim3mois">Intérim3mois</option>
-                                <option {% if listing.contract.type == 'CDD12mois' %} selected {% endif %}  value="CDD12mois">CDD12mois</option>
-                                <option {% if listing.contract.type == 'Indépendant/Freelance' %} selected {% endif %}  value="Indépendant/Freelance">Indépendant/Freelance</option>
-                                <option {% if listing.contract.type == 'Apprentissage/Alternance6mois' %} selected {% endif %}  value="Apprentissage/Alternance6mois">Apprentissage/Alternance6mois</option>
-                                <option {% if listing.contract.type == 'Franchises' %} selected {% endif %}  value="Franchises">Franchises</option>
-                                <option {% if listing.contract.type == 'Intérim7mois' %} selected {% endif %}  value="Intérim7mois">Intérim7mois</option>
-                                <option {% if listing.contract.type == 'CDD9mois' %} selected {% endif %}  value="CDD9mois">CDD9mois</option>
-                                <option {% if listing.contract.type == 'Intérim12mois' %} selected {% endif %}  value="Intérim12mois">Intérim12mois</option>
-                                <option {% if listing.contract.type == 'Intérim5mois' %} selected {% endif %}  value="Intérim5mois">Intérim5mois</option>
-                                <option {% if listing.contract.type == 'CDD14mois' %} selected {% endif %}  value="CDD14mois">CDD14mois</option>
-                                <option {% if listing.contract.type == 'CDD8mois' %} selected {% endif %}  value="CDD8mois">CDD8mois</option>
-                                <option {% if listing.contract.type == 'Intérim24mois' %} selected {% endif %}  value="Intérim24mois">Intérim24mois</option>
-                                <option {% if listing.contract.type == 'Intérim8mois' %} selected {% endif %}  value="Intérim8mois">Intérim8mois</option>
-                                <option {% if listing.contract.type == 'CDD7mois' %} selected {% endif %}  value="CDD7mois">CDD7mois</option>
-                                <option {% if listing.contract.type == 'Stage1mois' %} selected {% endif %}  value="Stage1mois">Stage1mois</option>
-                                <option {% if listing.contract.type == 'Intérim15mois' %} selected {% endif %}  value="Intérim15mois">Intérim15mois</option>
-                                <option {% if listing.contract.type == 'Intérim1mois' %} selected {% endif %}  value="Intérim1mois">Intérim1mois</option>
-                                <option {% if listing.contract.type == 'CDD10mois' %} selected {% endif %}  value="CDD10mois">CDD10mois</option>
-                                <option {% if listing.contract.type == 'Intérim2mois' %} selected {% endif %} value="Intérim2mois">Intérim2mois</option>
-                                <option {% if listing.contract.type == 'Apprentissage/Alternance24mois' %} selected {% endif %} value="Apprentissage/Alternance24mois">Apprentissage/Alternance24mois</option>
-                                <option {% if listing.contract.type == 'CDD1mois' %} selected {% endif %} value="CDD1mois">CDD1mois</option>                                
-                                <option {% if listing.contract.type == 'CDD2mois' %} selected {% endif %} value="CDD2mois">CDD2mois</option>
-                                <option {% if listing.contract.type == 'Stage12mois' %} selected {% endif %} value="Stage12mois">Stage12mois</option>
-                                <option {% if listing.contract.type == 'Stage2mois' %} selected {% endif %} value="Stage2mois">Stage2mois</option>
-                                <option {% if listing.contract.type == 'Contractuel' %} selected {% endif %} value="Contractuel">Contractuel</option>                               
-                                <option {% if listing.contract.type == 'Apprentissage/Alternance12mois' %} selected {% endif %}  value="Apprentissage/Alternance12mois">Apprentissage/Alternance12mois</option>
-                                <option {% if listing.contract.type == 'CDD11mois' %} selected {% endif %}  value="CDD11mois">CDD11mois</option>
-                                <option {% if listing.contract.type == 'CDD24mois' %} selected {% endif %}  value="CDD24mois">CDD24mois</option>
-                                <option {% if listing.contract.type == 'CDD15mois' %} selected {% endif %}  value="CDD15mois">CDD15mois</option>
-                                <option {% if listing.contract.type == 'Stage5mois' %} selected {% endif %}  value="Stage5mois">Stage5mois</option>
-                                <option {% if listing.contract.type == 'Stage' %} selected {% endif %}  value="Stage">Stage</option>                                
-                                <option {% if listing.contract.type == 'CDD36mois' %} selected {% endif %}  value="CDD36mois">CDD36mois</option>
-                                <option {% if listing.contract.type == 'Apprentissage/Alternance' %} selected {% endif %}  value="Apprentissage/Alternance">Apprentissage/Alternance</option>
-                                <option {% if listing.contract.type == 'CDD60mois' %} selected {% endif %}  value="CDD60mois">CDD60mois</option>
-                                <option {% if listing.contract.type == 'Stage9mois' %} selected {% endif %}  value="Stage9mois">Stage9mois</option>    
+                                {% for contract in contracts %}
+                                    <option {% if listing.contract.type == '{{contract.type}}' %} selected {% endif %} value="{{contract.type}}">{{contract}}</option>
+                                {% endfor %} 
                             </select>
                             <p class="help-block text-danger"></p>
                     </div>
@@ -111,7 +65,7 @@
                     </div>
                     <br />
                     <div id="success"></div>
-                    <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Save Changes</button></div>
+                    <div class="form-group"><button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Save and Add Preferred Skills</button></div>
                 </form>
             </div>
         </div>

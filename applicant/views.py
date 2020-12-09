@@ -6,24 +6,23 @@ from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Lis
 # from login.users import current_user
 # from login.users import set_user
 
+#RETURN USER INFO FOR THE SESSION
 def getUserInfo():
     file = open('current_user.txt', 'r')
     current_user =  int(file.readline())
     return current_user
 
+#SET USER INFO FOR THE SESSION
 def setUserInfo(user_id):
     file = open('current_user.txt', 'w')
     file.write(str(user_id))
     file.close()
 
-
-#current_user = users
 #This function gets the max values for n values in a dictionary
 def getMax(dict):
-
-    best_applicants = []
+    best_applicants = [] #this list will hold the best applicants
     NUM_APPLICANTS = 10  #This is the number of applicants we want to recommend
-    if len(dict) < NUM_APPLICANTS:
+    if len(dict) < NUM_APPLICANTS: #if there are less items in the dict than the number of applicants to return
         for i in range (0, len(dict)):
             key_max = max(dict, key=dict.get)
             best_applicants.append(key_max)
@@ -33,27 +32,16 @@ def getMax(dict):
             key_max = max(dict, key=dict.get)
             best_applicants.append(key_max)
             del dict[key_max]
-    # file = open('recommended.txt', 'w')
-    # file.write(str(best_applicants))
-    # file.close()
     return best_applicants
 
 def listingScore(listing_dict, app_skill_dict):
 
-    counter = 0
-
     applicant_skills = app_skill_dict.keys() #This is a list containing the Skill_ids of the preferred skills for example preferred_ids = [40,41,42,200]
     listing_scores = {}  #This is a dictionary storing each user and their overall score
     for listing_id, listing_skills in listing_dict.items():
-        #(key,value) #value = {40:1, 41:1, ...}, key = 4 (applicantID)
-        # print('------------LISTING ID----------------')
-        # print(listing_id)
-        # print('------------LISTING SKILLS----------------')
-        # print(listing_skills)
+        #(key,value) listing_skills = {40:1, 41:1, ...}, listingID = 4
 
         for skill in listing_skills: 
-            # print('-----------SKILL---------------')
-            # print(skill)
 
             if skill in applicant_skills: #If the skill id is in the applicants skill dictionary (value) then create a score
                 listing_skill_level = listing_skills[skill]
@@ -80,15 +68,7 @@ def listingScore(listing_dict, app_skill_dict):
 
             else:
                 listing_scores[listing_id] -= listing_skills[skill]
-                print('---------------------------------')
-                print('HERE')
-                print('---------------------------------')
-        # if counter > 30:
-        #     break
-        # else:
-        #     print('------------COUNTER---------------')
-        #     counter += 1
-    # print(user_scores)
+
     return(listing_scores)
 
 #This function returns a score for an applicant base upon the skills 
@@ -119,15 +99,12 @@ def applicantScore(applicant_dict, preferred_dict):
                     user_scores[key] = user_score
                 else:
                     user_scores[key] += user_score
-    # print(user_scores)
     return(user_scores)
 
-    
+#RETURN the applicant landing page with the recommended listings for their skill set
 def applicantPageView(request):
     user = getUserInfo()
-    file = open('recommended.txt', 'r')
-    recommended_listings = [104265, 104766, 100872, 101032, 101101, 101136, 101269, 101291, 101391, 101980]#list(file.readline())#scoreListings(user)
-    file.close()
+    recommended_listings = scoreListings(user) #[104265, 104766, 100872, 101032, 101101, 101136, 101269, 101291, 101391, 101980]
     listings = []
     for listing in recommended_listings:  
         listings.append(Listing.objects.get(id=listing))
@@ -169,10 +146,8 @@ def searchListings(request):
 def saveListing(request):
     user = getUserInfo()
     listingid = request.POST.get('id')
-    print('-------------id-----------------',listingid)
     listing = Listing.objects.get(id=listingid)
     applicant = Applicant.objects.get(id=user)
-    print('-------------app-----------------',applicant)
     savedListing = SavedListing(listing = listing, applicant = applicant)
     savedListing.save()
     return redirect('applicant')
@@ -214,7 +189,6 @@ def skillsPageView(request):
         if i.applicant.id == app_id:
             skills.append(i)
     dropdown = Skill.objects.all()
-    print(len(skills))
     context = {
         'skills' : skills,
         'dropdown' : dropdown
@@ -222,29 +196,18 @@ def skillsPageView(request):
     return render(request, "applicant/skills.html", context)
 
 def addSkills (request) :
-    skill = request.POST.get('skill')
-    skill_obj = Skill.objects.get(id=skill)
+    skill = Skill.objects.get(name=request.POST.get('skill').lower())
     level = request.POST.get('level')
-    userID = getUserInfo()
-
-    app = ApplicantSkill(applicant = Applicant.objects.get(id = userID), skill = skill_obj, skill_level = level)
-    app.save()
+    user = Applicant.objects.get(id=getUserInfo())
+    appSkill = ApplicantSkill(applicant = user, skill = skill, skill_level = level)
+    appSkill.save()
     return redirect("appSkills")
 
 def deleteSkills (request) :
-    app_skill = request.POST.get('del')
-    userid = getUserInfo()
-    print('---------skill=-----',app_skill)
-    user = Applicant.objects.get(id=userid)
-    print('----------user---------',user)
-    skill = Skill.objects.get(name=app_skill)
-    print(app_skill)
+    user = Applicant.objects.get(id=getUserInfo())
+    skill = Skill.objects.get(name=request.POST.get('del').lower())
     del_obj = ApplicantSkill.objects.get(applicant = user,skill=skill)
-    print(del_obj)
-    #app_skill.delete()
-    #deleteSkills = ApplicantSkill.objects.get(id=id)
-    #deleteSkills.delete()
-    print('--------------del-------------------')
+    del_obj.delete()
     return redirect('appSkills')
 
 def resumePageView(request):
@@ -279,14 +242,12 @@ def savedListingsPageView (request):
         'listings' : listings,
         'skills' : skills
     }
-    print('------------length-----------',len(listings))
     return render(request, "applicant/savedlistings.html", context)
 
 def unsaveListing(request):
     userid = getUserInfo()
     applicant = Applicant.objects.get(id=userid)
     listingid = request.POST.get('listingid')
-    print('---------id---------',listingid)
     listing = Listing.objects.get(id=listingid)
     del_sl = SavedListing.objects.get(listing=listing,applicant=applicant)
     del_sl.delete()
@@ -323,19 +284,29 @@ def createScore(listing_id): #Add the listingId as a parameter
                 applicants[applicant_skill.applicant.id][applicant_skill.skill.id] = applicant_skill.skill_level
     user_scores = applicantScore(applicants, preferred_dict)
     top_applicants = getMax(user_scores)
-    print('--------------TOP APPLICANTS-----------------')
-    print(top_applicants)
     return top_applicants
 
 def applicationView(request):
     user = getUserInfo()
     applicant = Applicant.objects.get(id=user)
-    
+
     applications = Application.objects.filter(applicant=applicant)
+
+    listing = Listing.objects.get(id=user)
+     
     context = {
-        'applications' : applications
+        'applications' : applications,
+        'applicant' : applicant,
+        'listing' : listing,
+
     }
     return render(request, "applicant/application.html", context)
+
+def deleteApplication(request):
+    application = Application.objects.get(id=request.POST.get('id'))
+    application.delete()
+    return redirect('application')
+
 
 def scoreListings(user):
     specific_applicant_id = 100050
@@ -376,3 +347,22 @@ def scoreListings(user):
         output += f'#{i+1} ListingID: ' + str(listing) + '<br>'
     return top_listings
     # return HttpResponse(output)
+
+def applyToJob (request):
+
+    listing = Listing.objects.get(id=getUserInfo())
+    applicant = Applicant.objects.get(id=getUserInfo())
+    status = 'Pending'
+    matchingSkills = 0
+    
+    application = Application(listing = listing, applicant = applicant, status=status, matching_skills = matchingSkills)
+
+    application.save()
+    
+    return redirect("application")
+
+def aboutPageView (request):
+    return render(request, 'applicant/about.html')
+
+def aboutInPageView (request):
+    return render(request, 'applicant/aboutin.html')

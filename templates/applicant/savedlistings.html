@@ -4,10 +4,12 @@
 <a class="navbar-brand js-scroll-trigger" href="{%url 'applicant'%}">BCR</a>
 {%endblock%}
 {% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'aboutin' %}">About</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicant' %}">Suggested Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'savedListings' %}">Saved Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'application' %}">Applications</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfileView' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicantLogin' %}">Sign Out</a></li>
 {% endblock %}
 {% block listing_header %}
 {% endblock %}
@@ -23,24 +25,23 @@
             </div>
             <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
             <div style = 'padding:10px'>
-                <h5>{{listing.job_title}}</h5>
+                <center><h5>{{listing.job_title}}</h5></center>
                 <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
-                    <div style='max-width:65%'>
-                        
-                        <p>{{listing.organization}}</p>
+                    <div>
+                        <center><p>{{listing.organization}}</p></center>
                         <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
                             <div>
-                                <p>sample description text goes here stuff about the job for like 10 secionds...</p>
+                                <center><p>{{listing.description | truncatechars:100 }}</p></center>
                             </div> 
                         </div>
                     </div>
-                        <div style='display:flex;flex-direction:column;padding-left:10px'>
+                        {% comment %} <div style='display:flex;flex-direction:column;padding-left:10px'>
                             {% for skill in skills %}
                             {% if skill.listing == listing %}
                                 <span style = 'display:flex;flex-direction:row;'><p>{{ skill }}</p></span>
                             {% endif %}
                             {% endfor %}
-                        </div>
+                        </div> {% endcomment %}
                 </div>
             </div>
         </div>
@@ -50,7 +51,6 @@
                     
 {% endblock %}
 {% block popups %}
-<h1>popups</h1>
     {% for listing in listings %}
     <!-- Portfolio Modals-->
         <div class="portfolio-modal modal fade" id="portfolioModal{{listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">

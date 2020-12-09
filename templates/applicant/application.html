@@ -4,30 +4,33 @@
 <a class="navbar-brand js-scroll-trigger" href="{%url 'applicant'%}">BCR</a>
 {%endblock%}
 {% block navigation %}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'aboutin' %}">About</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicant' %}">Suggested Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'savedListings' %}">Saved Listings</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'application' %}">Applications</a></li>
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfileView' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicantLogin' %}">Sign Out</a></li>
 {% endblock %}
 {% block dashboard %}
-<h1>Applications</h1>
+<h1>{{applicant.first_name}}'s Applications </h1>
+<b>Here you can view the jobs that you have applied for.<b>
 <div style="display:flex;flex-wrap:wrap" class="row justify-content-center" id='portfolio'>
 {% for application in applications %}
     <!-- Portfolio Item 1-->
-    <div class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important">
-        <div class="portfolio-item mx-auto" style='background-color:#6c757d' data-toggle="modal" data-target="#portfolioModal{{application.id}}">
-            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-            </div>
+    <div class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important;" >
+        <div class="portfolio-item mx-auto" style='background-color:#6c757d;color:#212529' data-toggle="modal" data-target="#portfolioModal{{application.listing.id}}">
+            <!--<div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                <div class="portfolio-item-caption-content text-center text-white" ><h2>View Details</h2></div>
+            </div>-->
+            <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
             <div style = 'padding:10px'>
-                <h5>Something to show up{{application.listing.name}}</h5>
-                <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
-                    <div style='max-width:55%'>
-                        
-                        <p>{{listing.organization}}</p>
-                        <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
+                <center><h5>{{application.listing.job_title}}</h5></center>
+                <div>
+                    <div>
+                        <center><p>{{application.listing.organization}}</p></center>
+                        <div>
                             <div>
-                                <p>{{listing.description | truncatechars:100 }}</p>
+                                <center><p>Status: {{application.status}}</p></center>
                             </div> 
                         </div>
                     </div>
@@ -41,21 +44,24 @@
                 </div>
             </div>
         </div>
+        <div style='display:flex;'>
+            <form method='POST' action="{% url 'deleteApplication' %}"> 
+                {% csrf_token %}
+                <input name='id' value='{{application.id}}' type='text' hidden>
+                <button class='btn btn-primary' style='margin-top:10px'>withdraw</button>
+            </form>
+        </div>
     </div>
     {% endfor %}
 </div>      
 {% endblock %}
-{% block popups %}
+{% block popup %}
     {% for application in applications %}
     <!-- Portfolio Modals-->
-        <div class="portfolio-modal modal fade" id="portfolioModal{{listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+        <div class="portfolio-modal modal fade" id="portfolioModal{{application.listing.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
-                    <form method='POST' action="{% url 'saveListing' %}" >
-                        {% csrf_token %}
-                        <input hidden value='{{listing.id}}' name='id' >
-                        <button class='' type='submit' style='float:left !important'><i class="fas fa-heart"></i></button>
-                    </form>
+                    
                     <button class='close' type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="fas fa-times"></i></span>
                     </button>
@@ -64,14 +70,12 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">{{application}}</h2>
+                                    <center><h2 class="portfolio-modal-title text-secondary text-uppercase mb-0" id="portfolioModal1Label">{{application}}</h2></center>
                                     <div >
-                                        <h3>{{application.organization}}</h3>
+                                        <center><h3>{{application.organization}}</h3></center>
                                     </div>
-                                    <h6>{{application.status}}</h6>
-                                    <button class="btn btn-primary">
-                                            Apply
-                                    </button> 
+                                    <center><h6>{{application.status}}</h6></center>
+                                    
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
@@ -109,5 +113,6 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
-{% endblock %}
+{% endfor %}
+{%endblock%}      
+ 

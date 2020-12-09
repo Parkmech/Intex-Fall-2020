@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% extends 'mainbase.html' %}
+{% load static %}
+{%block title%}
+    <a class="navbar-brand js-scroll-trigger" href="{%url 'applicant'%}">BCR</a>
+{%endblock%}
+{% block  navigation%}
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'aboutin' %}">About</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicant' %}">Suggested Listings</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'savedListings' %}">Saved Listings</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'application' %}">Applications</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'appProfileView' %}">Profile</a></li>
+    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'applicantLogin' %}">Sign Out</a></li>
+{% endblock %}
+{% block  content%}
+        <!-- Masthead-->
+        <!-- Portfolio Section-->
+        <section class="page-section portfolio" id="portfolio">
+            <div class="container">
+                <!-- Portfolio Section Heading-->
+                <br><br>
+                <br><br>
+                <div class="row">
+                    <div class="column">
+                        <img src='https://source.unsplash.com/450x600/?business' style='border-radius: 0.5rem;'>                    </div>
+                    <div class="column">
+                        <h3 style="text-align: center;">About Us</h3>
+                        <p>
+                            There is great potential for growth and improvement when
+                            it comes to recruiting Black individuals.
+                            The numbers speak for themselves. We aim to 
+                            eradicate the disadvantages that disincentevize hiring Black applicants.
+                        </p>
+                        <ul>
+                            <li>
+                            The first barrier to entry for Black applicants are GPA cutoffs.
+                            <a href='https://learn.joinhandshake.com/employers/3-hiring-practices-that-disadvantage-black-students/'> A study done by Handshake</a> shows that
+                            Black applicants are cut off from applying
+                            for a job due to the GPA cutoffs one and a half times 
+                            more than a non-minority applicant. 
+                            </li>
+                            <li>
+                            Second, complicated
+                            application processes can deter Black individuals 
+                            from applying for a position. The same Handshake study
+                            shows that the more laborious a job
+                            application is, the less likely Black applicants
+                            are to apply. Specifically, if all that is required for 
+                            a job application is a resume,
+                            two and half times more Black applicants
+                            will apply for the job. 
+                            </li>
+                            <li>
+                            The third hurdle for Black candidates is ambiguity with 
+                            regards to salary and relocation assistance in job listings. 
+                            Thirty six percent more Black applicants will
+                            apply for a job when there is relocation assistance
+                            mentioned in the job description, and even just listing
+                            the annual salary on the job description will increase
+                            the chance of a Black candidate applying for the job by
+                            thirteen percent.
+                            </li>
+                            <li>
+                            Lastly, strict recruiting windows limit
+                            black applicants. There is a six percent disparity between
+                            black and non black applicants in applying for jobs during
+                            the peak recruiting seasons, which then translates to less
+                            black applicants hired. 
+                            </li>
+                        </ul>
+                        At Black Cyber Recruiter, our mission is to provide opportunities for
+                        employers to connect with Black candidates and diminish the disparity
+                        between non-POC persons in the work force. Additionally, we aim to assist
+                        Black candidates in their search for work by leveraging AI and recommending the 
+                        opportunities with the best fit for each individual applicant. 
+                        </div>
+                        <br><br>
+                </div>
+                <style>
+                    .column {
+                        float: left;
+                        width: 50%;
+                    }
+                </style>
+            <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+        {% endblock %}

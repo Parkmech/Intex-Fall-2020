@@ -75,7 +75,7 @@ class  Application(models.Model):
     matching_skills = IntegerField()
 
     def __str__(self):
-        return str(self.listing) + ', ' + str(self.applicant) + "'s Application" 
+        return str(self.listing) 
 
 class Offer(models.Model):
     text = models.CharField(max_length=1000)

@@ -1,10 +1,12 @@
 from login.views import employerSignUpView
 from os import name
 from django.urls import path
-from .views import editListing, createListing, addOrganization, editEmployerProfile, employerPageView, employerSkillView, employerProfileView, employerCreateView, employerEditView, employerEditProfileView, matchbox, suggestApp, deleteListing
+from .views import employerAboutView, editListing, createListing, addOrganization, editEmployerProfile, employerPageView, employerSkillView, employerProfileView, employerCreateView, employerEditView, employerEditProfileView, matchbox, suggestApp, deleteListing, addPreferredSkills, deletePreferredSkills
 
 urlpatterns = [
-    path('skills/', employerSkillView, name='skills'),
+    path('skills/add', addPreferredSkills, name='addPreferredskill'),
+    path('skills/delete', deletePreferredSkills, name='deletePreferredSkills'),
+    path('skills/<listingid>', employerSkillView, name='skills'),
     path('editprofile/', employerEditProfileView, name='profile'),
     path('profile/', employerProfileView, name='profileView'),
     path('createlisting/', employerCreateView, name='createListing'),
@@ -16,5 +18,7 @@ urlpatterns = [
     path('listing/delete', deleteListing, name= 'deleteListing'),
     path('suggestListings/<listingid>', suggestApp, name= 'suggestApp'),
     path('test/', matchbox, name= 'test'), #Delete later
+    path('moreusers/', matchbox, name= 'matchbox'),
     path('', employerPageView, name='employer'),
+    path('about/', employerAboutView, name='empAbout'),
 ]

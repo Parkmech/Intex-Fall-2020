@@ -22,7 +22,7 @@
     </div>
 {% endblock %}
 {% block dashboard %}
-<h1>Suggested Applicants for {{listing}}</h1>
+<h1>Applicants similar to {{base_applicant}}</h1>
 <div style='display:flex; flex-wrap: wrap; flex-direction: row'> 
 {% for applicant in applicants %}
     <!-- Portfolio Item 1-->
@@ -68,7 +68,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary mb-0" id="portfolioModal1Label">{{applicant}}</h2>                                    
+                                    <h2 class="portfolio-modal-title text-secondary mb-0" id="portfolioModal1Label">{{applicant}}</h2>
                                     <br>
                                     <h4>{{applicant.email}}</h4>
                                     <div class="divider-custom">
@@ -110,6 +110,7 @@
                                             <input hidden value="{{listing.id}}" name="listingid" />
                                             <button type='submit' class='btn btn-primary'>Get more applicants like {{applicant}}</button>
                                         </form>
+                                        
                                     </div>
                                 </div>
                             </div>
