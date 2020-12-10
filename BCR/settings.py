@@ -1,3 +1,5 @@
+import django_heroku
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -9,12 +11,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'vt=17#at38!c9atdigr#da!-pa0ebzdr!od&n81pb5=i#vxk2w'
+#SECRET_KEY = 'vt=17#at38!c9atdigr#da!-pa0ebzdr!od&n81pb5=i#vxk2w'
+SECRET_KEY = os.environ.get('SECRET_KEY')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') 
+
+#heroku config:set SECRET_KEY="vt=17#at38!c9atdigr#da!-pa0ebzdr!od&n81pb5=i#vxk2w" --app g18-bcr 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'g18-bcr.herokuapp.com'] 
+
 
 
 # Application definition
@@ -29,6 +37,7 @@ INSTALLED_APPS = [
     'applicant.apps.ApplicantConfig',
     'employer.apps.EmployerConfig',
     'login.apps.LoginConfig',
+    'whitenoise.runserver_nostatic', 
 ]
 
 MIDDLEWARE = [
@@ -39,7 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_globals.middleware.Global'
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
 ]
 
 ROOT_URLCONF = 'BCR.urls'
@@ -75,6 +84,8 @@ DATABASES = {
     'HOST': 'localhost'
     }
 }
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env) 
 
 
 # Password validation
@@ -119,5 +130,9 @@ STATICFILES_DIRS = [
        os.path.join(BASE_DIR, 'BCR/static')
 ]  
 
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'BCR/media') 
 MEDIA_URL = '/media/'
+
+django_heroku.settings(locals()) 
