@@ -11,7 +11,7 @@ class Applicant(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     password = models.CharField(max_length=100)
-    resume = models.FileField(upload_to='files', blank=True, null=True)
+    resume = models.FileField(upload_to='files', blank=True, null=True, default='/media/files/resume.txt')
     photo = models.ImageField(upload_to = 'photos', blank = True, null = True)
 
     def __str__(self):

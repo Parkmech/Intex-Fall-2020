@@ -1,7 +1,7 @@
 from login.views import employerSignUpView
 from os import name
 from django.urls import path
-from .views import employerAboutView, editListing, createListing, addOrganization, editEmployerProfile, employerPageView, employerSkillView, employerProfileView, employerCreateView, employerEditView, employerEditProfileView, matchbox, suggestApp, deleteListing, addPreferredSkills, deletePreferredSkills
+from .views import makeOffer, employerAboutView, editListing, createListing, addOrganization, editEmployerProfile, employerPageView, employerSkillView, employerProfileView, employerCreateView, employerEditView, employerEditProfileView, matchbox, suggestApp, deleteListing, addPreferredSkills, deletePreferredSkills
 
 urlpatterns = [
     path('skills/add', addPreferredSkills, name='addPreferredskill'),
@@ -21,4 +21,5 @@ urlpatterns = [
     path('moreusers/', matchbox, name= 'matchbox'),
     path('', employerPageView, name='employer'),
     path('about/', employerAboutView, name='empAbout'),
+    path('makeOffer/', makeOffer, name='makeOffer'),
 ]

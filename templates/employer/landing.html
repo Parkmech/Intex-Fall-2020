@@ -20,7 +20,7 @@
 {% for listing in listings %}
     <!-- Portfolio Item 1-->
     <div class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important;" >
-        <a class="portfolio-item mx-auto" style='background-color:#6c757d;color:#212529' href="{% url 'suggestApp' listingid=listing.id %}" >
+        <a class="portfolio-item mx-auto" style='' href="{% url 'suggestApp' listingid=listing.id %}" >
             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                 <div class="portfolio-item-caption-content text-center text-white"><h2>Suggest Applicants</h2></div>
             </div>
@@ -50,17 +50,17 @@
             <form method='POST' action="{% url 'editListingView'%}">
                 {% csrf_token %}
                 <input name='listingid' value='{{listing.id}}' type='text' hidden>
-                <button class='btn btn-primary' style='margin-top:10px'>edit</button>
+                <button class='btn btn-primary' style='margin-top:10px'>Edit</button>
             </form>
-            <p style='color:#fff'>-----</p>
+            <p style='color:#EEE9E6'>-----</p>
             <div data-toggle="modal" data-target="#portfolioModal{{listing.id}}">
-            <button class='btn btn-primary' style='margin-top:10px'>view</button>
+            <button class='btn btn-primary' style='margin-top:10px'>View</button>
             </div>
-            <p style='color:#fff'>-----</p>
+            <p style='color:#EEE9E6'>-----</p>
             <form method='POST' action="{% url 'deleteListing'%}">
                 {% csrf_token %}
                 <input name='listingid' value='{{listing.id}}' type='text' hidden>
-                <button class='btn btn-primary' style='margin-top:10px'>delete</button>
+                <button class='btn btn-primary' style='margin-top:10px'>Delete</button>
             </form>
         </div>
     </div>
@@ -132,7 +132,7 @@
                                         <button class="btn btn-primary" data-dismiss="modal">
                                             <i class="fas fa-times fa-fw"></i>
                                             Close Listing
-                                        </button><p style='color:#f8f9fa'>------------------</p>
+                                        </button><p style='color:#EEE9E6'>------------------</p>
                                        
                                     </div>
                                 </div>

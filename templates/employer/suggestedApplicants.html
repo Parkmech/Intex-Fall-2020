@@ -13,27 +13,52 @@
     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'employerLogin' %}">Sign Out</a></li>
 {% endblock %}
 {% block listing_header %}
+<h1>{{listing}}</h1>
     <div style='display:flex;flex-wrap:wrap'>
-        <h4 style='align-self:center'>Preferred Skills</h4><p style='color:#fff'>--------</p>
+        <h3 style='align-self:center'>Preferred Skills</h3><p style='color:#EEE9E6'>--------</p>
         {% for pSkill in preferredSkills %}
             <button class='btn btn-primary' style='margin-bottom:.5rem'>{{pSkill}}</button>
-            <p style='color:#fff'>-----</p>
+            <p style='color:#EEE9E6'>-----</p>
         {% endfor %}
     </div>
 {% endblock %}
 {% block dashboard %}
-<h1>Suggested Applicants for {{listing}}</h1>
+    {% if applications %}
+    <br>
+    <h3>Submitted Applications</h3>
+    {% endif %}
+<div style='display:flex; flex-wrap: wrap; flex-direction: row'> 
+{% for application in applications %}
+    <!-- Portfolio Item 1-->
+    <div class="portfolio-item mx-auto" style='margin: .5rem !important; margin-bottom: .5rem !important; max-width: 20rem;min-width: 20rem; padding:1rem !important;  display:flex; flex-wrap:wrap; flex-direction:row' data-toggle="modal" data-target="#portfolioModalapp{{application.id}}">
+        <div style='magrin:0 !important'>
+            <h3>{{application.applicant}}</h3>
+            <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
+                <div style='display:flex;flex-direction:column;padding-left:10px'>
+                </div>
+            </div>
+        </div>
+        <div style='display:flex;'>
+            <form method='POST' action="{% url 'makeOffer'%}">
+                {% csrf_token %}
+                <input name='id' value='{{application.id}}' type='text' hidden>
+                <input name='lid' value='{{listing.id}}' type='text' hidden>
+                <button class='btn btn-primary' style='margin-top:10px'>Make Offer</button>
+            </form>
+        </div>
+    </div >
+    
+{% endfor %}
+</div>
+<br><br>
+<h3>Suggested Applicants</h3>
 <div style='display:flex; flex-wrap: wrap; flex-direction: row'> 
 {% for applicant in applicants %}
     <!-- Portfolio Item 1-->
-
-    <div class="portfolio-item mx-auto" style='margin: .5rem !important; margin-bottom: .5rem !important; max-width: 20rem;min-width: 20rem; background-color:#6c757d; padding:1rem !important;  display:flex; flex-wrap:wrap; flex-direction:row' data-toggle="modal" data-target="#portfolioModal{{applicant.id}}">
-        
-        <!--<img class="img-fluid" src='https://source.unsplash.com/random/800x600' alt="" />-->
+    <div class="portfolio-item mx-auto" style='margin: .5rem !important; margin-bottom: .5rem !important; max-width: 20rem;min-width: 20rem; padding:1rem !important;  display:flex; flex-wrap:wrap; flex-direction:row' data-toggle="modal" data-target="#portfolioModal{{applicant.id}}">
         <div style='magrin:0 !important'>
             <h3>{{applicant}}</h3>
             <div style='display:flex;flex-direction:row;flexwrap:nowrap'>
-                
                 <div style='display:flex;flex-direction:column;padding-left:10px'>
                     {% for key, value in appDict.items %}
                     {% if applicant.id == key %}
@@ -47,12 +72,9 @@
                 </div>
             </div>
         </div>
-        
     </div>
-
 {% endfor %}
-</div>
-                    
+</div>             
 {% endblock %}
 {% block popups %}
     {% for applicant in applicants %}
@@ -98,18 +120,28 @@
                                    <br>
                                    <br>
                                    <br>
-                                    <div style='display:flex;flex-wrap:wrap'>
-                                        <button class="btn btn-primary" data-dismiss="modal">
-                                            <i class="fas fa-times fa-fw"></i>
-                                            Close Listing
-                                        </button>
-                                        <p style='color: #fff'>-----------------</p>
+                                    <div style='display:flex;flex-wrap:nowrap'>
+                                        
+                                        
                                         <form method='POST' action="{% url 'matchbox'%}">
                                             {% csrf_token %}
                                             <input hidden value="{{applicant.id}}" name="applicantid" />
                                             <input hidden value="{{listing.id}}" name="listingid" />
-                                            <button type='submit' class='btn btn-primary'>Get more applicants like {{applicant}}</button>
+                                            <button type='submit' class='btn btn-primary'>Get More Applicants Like {{applicant}}</button>
                                         </form>
+                                        <p style='color: #EEE9E6'>----</p>
+                                        {% if resume %}
+                                        {% with dirs='http://localhost:8000'|add:applicant.resume.url %}
+                                        <a class = 'btn btn-primary'  href="{{dirs}}" download>Download Resume</a>
+                                        {% endwith %}
+                                        {% else %}
+                                        <a class = 'btn btn-primary'  href="" download>Download Resume</a>
+                                        {% endif %}
+                                        <p style='color: #EEE9E6'>----</p>
+                                        <button class="btn btn-primary" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close Listing
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -119,4 +151,70 @@
             </div>
         </div>
     {% endfor %}
+    {% for application in applications %}
+    <!-- Portfolio Modals-->
+        <div class="portfolio-modal modal fade" id="portfolioModalapp{{application.id}}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                    <div class="modal-body text-center">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary mb-0" id="portfolioModal1Label">{{application.applicant}}</h2>                                    
+                                    <br>
+                                    <a href="mailto:{{application.applicant.email}}"><h4>{{application.applicant.email}}</h4></a>
+                                    <div class="divider-custom">
+                                        <div class="divider-custom-line"></div>
+                                        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                                        <div class="divider-custom-line"></div>
+                                    </div>
+                                    <!-- Portfolio Modal - Image-->
+        
+                                    <!-- Portfolio Modal - Text-->
+                                    <div style='display:flex;flex-wrap:wrap'>
+                                    {% for skill in skills %}
+                                    {% if skill.applicant == application.applicant %}
+                                        {% if skill.skill_level > 4 %}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex" >
+                                                <p style="margin: 0;">{{skill.skill.name | title}} - 4</p>
+                                            </div>
+                                        {% else %}
+                                            <div class = 'btn btn-primary' style="margin: 7px;display:flex">
+                                                <p style="margin: 0;">{{skill}}</p>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}   
+                                    {% endfor %}
+                                    </div>
+                                   <!-- <p class="mb-5">{{listing.description}}</p> -->
+                                   <br>
+                                   <br>
+                                   <br>
+                                    <div style='display:flex;flex-wrap:nowrap'>
+                                        {% if resume %}
+                                        {% with dirs='http://localhost:8000'|add:applicant.resume.url %}
+                                        <a class = 'btn btn-primary'  href="{{dirs}}" download>Download Resume</a>
+                                        {% endwith %}
+                                        {% else %}
+                                        <a class = 'btn btn-primary'  href="" download>Download Resume</a>
+                                        {% endif %}
+                                        <p style='color: #EEE9E6'>----</p>
+                                        <button class="btn btn-primary" data-dismiss="modal">
+                                            <i class="fas fa-times fa-fw"></i>
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    
 {% endblock %}

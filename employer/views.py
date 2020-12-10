@@ -1,5 +1,5 @@
-from applicant.views import scoreListings
-from login.views import getEmployerInfo
+from applicant.views import getUserInfo, scoreListings
+from login.views import getEmployerInfo, setEmployerInfo
 from login.views import getEmployerInfo
 from applicant.models import Contract, PreferredSkill
 from django import http
@@ -9,6 +9,12 @@ from django.shortcuts import redirect
 from applicant.models import Applicant, ApplicantSkill, PreferredSkill, Listing, Skill, Organization, Application
 # Create your views here.
 
+def makeOffer (request):
+    listingid = request.POST.get('lid')
+    application = Application.objects.get(id=request.POST.get('id'))
+    application.status = "Offered"
+    application.save()
+    return redirect('suggestApp', listingid)
 def getMax(dict):
 
     best_applicants = []
@@ -43,8 +49,6 @@ def applicantScore(applicant_dict, preferred_dict):
             
             if id in value: #If the skill id is in the applicants skill dictionary (value) then create a score
                 user_level = value[id]
-                print('-----------------------------------------')
-                print('USER:', key, 'SKILLS:', value, 'CURRENT SKILL', id)
                 if user_level > 4: #We only want skills ranging from 0-4, truncate any skills greater than 4 to a value of 4
                     user_level = 4
 
@@ -57,29 +61,22 @@ def applicantScore(applicant_dict, preferred_dict):
                 #Add the score to the user_scores dictionary.
                 #This will store each applicant with their overall score for the listing
                 if (user_level - preferred_level) >= 2:
-                    print("HIGHER USER LEVEL: Id = ", id, 'preferred level ', preferred_level, 'user level', user_level)
                     if key not in user_scores:
                         user_scores[key] = ((user_level - preferred_level) * -1) + 1
                     else:
                         user_scores[key] += ((user_level - preferred_level) * -1) + 1
-                    print('SCORE: ',user_scores[key])
 
                 else:
-                    print('HAS SKILL: Id = ', id, 'preferred level ', preferred_level, 'user level ', user_level)
                     if key not in user_scores:
                         user_scores[key] = user_score
                     else:
                         user_scores[key] += user_score
-                    print('SCORE: ',user_scores[key])
             else:    
-                print('DOESNT HAVE SKILL: Id = ', id, 'preferred level ', preferred_dict[id])
                 if key not in user_scores:
                     user_scores[key] = (((preferred_dict[id]) * -1) - 1)
                 else:
                     user_scores[key] += (((preferred_dict[id]) * -1) - 1)
-                print('SCORE: ',user_scores[key])
-        print('USER SCORE:',user_scores[key])
-        print('-----------------------------------------', '\n\n\n')
+
     # print(user_scores)
     return(user_scores)
 
@@ -118,22 +115,27 @@ def createScore(listing_id): #Add the listingId as a parameter
     return top_applicants, top_scores
 
 def addOrganization(request):
-    
-    company_name = request.POST.get("companyName") 
-    email = request.POST.get("empEmail")
-    password = request.POST.get("empPassword")
-    address = request.POST.get("empAddress")
-    size = request.POST.get("empSize")
-    sector = request.POST.get("empSector")
+    try:
+        company_name = request.POST.get("companyName") 
+        email = request.POST.get("empEmail")
+        password = request.POST.get("empPassword")
+        address = request.POST.get("empAddress")
+        size = request.POST.get("empSize")
+        sector = request.POST.get("empSector")
 
-    org = Organization(company_name = company_name, email = email, password = password, address = address, size=size, sector=sector)
-    org.save()
+        org = Organization(company_name = company_name, email = email, password = password, address = address, size=size, sector=sector)
+        org.save()
+        setEmployerInfo(org.id)
 
-    return redirect("employer")
+        return redirect("createListing")
+    except:
+        return redirect("employerSignup")
 
 def employerPageView(request):
     user = getEmployerInfo()
+    print('USER: ',  user,  '\n')
     employer = Organization.objects.get(id=user)
+    print('EMPLOYER: ', employer, '\n')
     listings = Listing.objects.filter(organization = employer)
     
     skills = ApplicantSkill.objects.all()
@@ -143,6 +145,7 @@ def employerPageView(request):
         'skills' : skills,
         'employer' : employer
     }
+
     return render(request, "employer/landing.html", context)
 
 def suggestApp(request, listingid):
@@ -161,7 +164,11 @@ def suggestApp(request, listingid):
     appDictKeys = appDict.keys()
 
     preferredSkills = PreferredSkill.objects.filter(listing=listing)
+    
+    resume = False
 
+    applications = Application.objects.filter(listing=listing)
+        
     context = {
         'listing' : listing,
         'applicants' : applicants,
@@ -169,8 +176,11 @@ def suggestApp(request, listingid):
         'skills' : skills,
         'appDict' : appDict,
         'addDictKeys': appDictKeys,
-        'preferredSkills' : preferredSkills
+        'preferredSkills' : preferredSkills,
+        'resume' : resume,
+        'applications' : applications,
     }
+
     return render(request, "employer/suggestedApplicants.html",context)
 
 
@@ -187,10 +197,8 @@ def employerSkillView(request,listingid):
     return render(request, "employer/skills.html", context)
 
 def addPreferredSkills (request) :
-    print('--------id--------', request.POST.get('listingid'))
     listing = Listing.objects.get(id=request.POST.get('listingid'))
     skill_name = request.POST.get("skill").lower()
-    print('--------skill name--------', skill_name)
     skill = Skill.objects.get(name=skill_name)
     level = request.POST.get("level")
 
@@ -301,7 +309,6 @@ def matchbox(web_request):
     # If you are using Python 3+, import urllib instead of urllib2
     import json 
 
-    print('-----------------------------------', 'INPUTS')
     data = {
             "Inputs": {
                     "input1":

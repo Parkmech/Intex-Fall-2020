@@ -10,7 +10,8 @@ import employer.urls
 # Create your views here
 def getEmployerInfo():
     file = open('current_employer.txt', 'r')
-    current_user =  int(file.readline())
+    current_user =  file.readline()
+    current_user = int(current_user)
     return current_user
 
 def setEmployerInfo(user_id):
@@ -29,22 +30,28 @@ def setUserInfo(user_id):
     file.close()
 
 def candidateLoginForm(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = Applicant.objects.get(username=username, password = password)
-    setUserInfo(user.id)
-    print('-------------------------LOGIN---------------------')
-    print(getUserInfo())
-    return redirect('applicant')
+    try:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = Applicant.objects.get(username=username, password = password)
+        setUserInfo(user.id)
+        return redirect('applicant')
+    except:
+        return redirect('applicantLogin')
+
 
 def employerLoginForm(request):
-    email = request.POST.get('email')
-    password = request.POST.get('password')
-    user = Organization.objects.get(email=email, password = password)
-    setEmployerInfo(user.id)
-    print('-------------------------EMPLOYER---------------------')
-    print(getEmployerInfo())
-    return redirect('employer')
+    try:
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = Organization.objects.get(email=email, password = password)
+        print('--------------------------------------SET INFO---------------------------')
+        setEmployerInfo(user.id)
+        print('EMPLOYER: ',getEmployerInfo())
+        return redirect('employer')
+    except:
+        return redirect('employerLogin')
+        
 
 def candidateLoginView(request):
     return render(request, 'login/candidatelogin.html')

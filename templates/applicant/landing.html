@@ -19,7 +19,7 @@
 {% for listing in listings %}
     <!-- Portfolio Item 1-->
     <div class="col-md-6 col-lg-4 mb-5" style="margin:0 !important; padding:1rem !important">
-        <div class="portfolio-item mx-auto" style='background-color:#6c757d' data-toggle="modal" data-target="#portfolioModal{{listing.id}}">
+        <div class="portfolio-item mx-auto" style='' data-toggle="modal" data-target="#portfolioModal{{listing.id}}">
             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
             </div>
@@ -61,7 +61,7 @@
                         <form method='POST' action="{% url 'saveListing' %}" >
                             {% csrf_token %}
                             <input hidden value='{{listing.id}}' name='id' >
-                            <button class='' type='submit' style='float:left !important'><i class="fas fa-heart"></i></button>
+                            <button aria-hidden-"true" style= "margin: 10px" class='btn btn-primary' type='submit' style='float:left !important'><i class="fas fa-heart"></i></button>
                         </form>
                         <button class='close' type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"><i class="fas fa-times"></i></span>
@@ -80,7 +80,7 @@
                                     <h6>in {{listing.city}}</h6>
                                     <form method='POST' action="{% url 'applyToJob' %}">
                                         {% csrf_token %}
-                                        <button class="btn btn-primary" type="submit">
+                                        <button value={{listing.id}} class="btn btn-primary" type="submit" name = 'apply'>
                                                 Apply
                                         </button> 
                                     </form>
@@ -113,7 +113,7 @@
                                         <button class="btn btn-primary" data-dismiss="modal">
                                             <i class="fas fa-times fa-fw"></i>
                                             Close Listing
-                                        </button><p style='color:#f8f9fa'>------------------</p>
+                                        </button><p style='color:#EEE9E6'>------------------</p>
                                        
                                     </div>
                                 </div>

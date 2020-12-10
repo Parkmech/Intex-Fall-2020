@@ -36,21 +36,19 @@ def getMax(dict):
     return best_applicants
 
 def listingScore(listing_dict, app_skill_dict):
-
-    applicant_skills = app_skill_dict.keys() #This is a list containing the Skill_ids of the preferred skills for example preferred_ids = [40,41,42,200]
+    applicant_skills = app_skill_dict #This is a list containing the Skill_ids of the preferred skills for example preferred_ids = [40,41,42,200]
     listing_scores = {}  #This is a dictionary storing each user and their overall score
-    for listing_id, listing_skills in listing_dict.items():
+    for listing_ids, listing_skills in listing_dict.items():
         #(key,value) listing_skills = {40:1, 41:1, ...}, listingID = 4
 
         for skill in listing_skills: 
-
-            if skill in applicant_skills: #If the skill id is in the applicants skill dictionary (value) then create a score
-                listing_skill_level = listing_skills[skill]
+            if skill.skill.id in applicant_skills.keys(): #If the skill id is in the applicants skill dictionary (value) then create a score
+                listing_skill_level = skill.skill_level
             
-                if app_skill_dict[skill] > 4: #We only want skills ranging from 0-4, truncate any skills greater than 4 to a value of 4
-                    app_skill_dict[skill] = 4
+                if app_skill_dict[skill.skill.id] > 4: #We only want skills ranging from 0-4, truncate any skills greater than 4 to a value of 4
+                    app_skill_dict[skill.skill.id] = 4
 
-                applicant_skill_level = app_skill_dict[skill]  #preferred skill level
+                applicant_skill_level = app_skill_dict[skill.skill.id]  #preferred skill level
                 #Create a score either + or -
                 #An applicant with a higher level than preferred gets positive points
                 #While applicants with a lower level than preferred gets negative points
@@ -59,17 +57,19 @@ def listingScore(listing_dict, app_skill_dict):
                     listing_score = (listing_skill_level - applicant_skill_level) + 1
                 else:
                     listing_score = applicant_skill_level - listing_skill_level
-
+                
                 #Add the score to the user_scores dictionary.
                 #This will store each applicant with their overall score for the listing
-                if listing_id not in listing_scores:
-                    listing_scores[listing_id] = listing_score
+                if listing_ids not in listing_scores:
+                    listing_scores[listing_ids] = listing_score
                 else:
-                    listing_scores[listing_id] += listing_score
+                    listing_scores[listing_ids] += listing_score
 
             else:
-                listing_scores[listing_id] -= listing_skills[skill]
-
+                if listing_ids not in listing_scores:
+                    listing_scores[listing_ids] = (skill.skill_level) * -1
+                else: 
+                    listing_scores[listing_ids] -= skill.skill_level
     return(listing_scores)
 
 #This function returns a score for an applicant base upon the skills 
@@ -156,23 +156,26 @@ def saveListing(request):
     applicant = Applicant.objects.get(id=user)
     savedListing = SavedListing(listing = listing, applicant = applicant)
     savedListing.save()
+    # if (listingid is not savedListing.listing.listingid)
     return redirect('applicant')
 
 def addProfile(request):
+    try:
+        email = request.POST.get("email") 
+        username = request.POST.get("username")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        password = request.POST.get("password")
+        print(first_name, last_name, username)
+        app = Applicant(email=email, username=username, first_name = first_name, last_name=last_name, password='password')
+        app.save()
+        
+        user = Applicant.objects.get(username = username, password = 'password')
+        setUserInfo(user.id)
 
-    email = request.POST.get("email") 
-    username = request.POST.get("username")
-    first_name = request.POST.get("first_name")
-    last_name = request.POST.get("last_name")
-    password = request.POST.get("password")
-
-    app = Applicant(email=email, username=username, first_name = first_name, last_name=last_name, password='password')
-    app.save()
-    
-    user = Applicant.objects.get(username = username, password = 'password')
-    setUserInfo(user.id)
-
-    return redirect("appSkills")
+        return redirect("appSkills")
+    except:
+        return redirect("applicantSignup")
 
 
 def editProfile(request):
@@ -181,7 +184,8 @@ def editProfile(request):
     editApp = Applicant.objects.get(id=user)
     editApp.first_name = request.POST.get("appFirst")
     editApp.last_name = request.POST.get("appLast")
-    editApp.password = request.POST.get("appPassword")
+    print('========Request=================',request.FILES['files'])
+    editApp.resume = request.FILES['file']
     editApp.save()
 
     return redirect("appProfileView")
@@ -235,10 +239,33 @@ def profileEditPageView(request):
 def profilePageView(request):
     user = getUserInfo()
     applicant = Applicant.objects.get(id=user)
+
+
+    applicantid = applicant.id
+    email = applicant.email
+    first_name = applicant.first_name
+    last_name = applicant.last_name
+    username = applicant.username
+    dirs = ''
+    if applicant.resume:
+        print('-------------------TRUE-----------------------')
+        resume = applicant.resume
+        dirs = 'http://localhost:8000' + applicant.resume.url
+    else:
+        resume = ''
+
+    
+    
     context = {
-        'applicant' : applicant
+        'applicantid' : applicant,
+        'email' : email,
+        'first_name' : first_name,
+        'last_name' : last_name,
+        'username' : username,
+        'resume' : resume,
+        'dirs' : dirs,
     }
-    return render(request, "applicant/profileview.html",context)
+    return render(request, "applicant/profileview.html", context)
 
 def savedListingsPageView (request):
     userid = getUserInfo()
@@ -297,13 +324,26 @@ def createScore(listing_id): #Add the listingId as a parameter
     top_applicants = getMax(user_scores)
     return top_applicants
 
+def applyToJob (request):
+
+    listing = Listing.objects.get(id=getUserInfo())
+    applicant = Applicant.objects.get(id=getUserInfo())
+    status = 'Pending'
+    matchingSkills = 0
+    
+    application = Application(listing = listing, applicant = applicant, status=status, matching_skills = matchingSkills)
+
+    application.save()
+    
+    return redirect("application")
+
 def applicationView(request):
     user = getUserInfo()
     applicant = Applicant.objects.get(id=user)
 
     applications = Application.objects.filter(applicant=applicant)
-
-    listing = Listing.objects.get(id=user)
+    
+    listing = request.POST.get('apply')
      
     context = {
         'applications' : applications,
@@ -320,7 +360,7 @@ def deleteApplication(request):
 
 
 def scoreListings(user):
-    specific_applicant_id = 100050
+    specific_applicant_id = user
     ids = []
     applicant_skills = ApplicantSkill.objects.filter(applicant_id = specific_applicant_id)
     for skill in applicant_skills:
@@ -343,15 +383,22 @@ def scoreListings(user):
 
     #Go through each group and find all of the matching skills for each applicant
     #and put them into a dictionary
+    listing_skills_dict = {}
     listings = {}
     for listing_group in listing_groups:
         for listing_skill in listing_group: 
+            
             if listing_skill.listing.id not in listings:
                 listings[listing_skill.listing.id] = {}
                 listings[listing_skill.listing.id][listing_skill.skill.id] = listing_skill.skill_level
             else:
                 listings[listing_skill.listing.id][listing_skill.skill.id] = listing_skill.skill_level
-    user_scores = listingScore(listings, app_skills_dict)
+    for listing in listings.keys():
+        listing_skills_dict[listing] = PreferredSkill.objects.filter(listing = listing)
+        # for listing in listing_skills_dict[listing]:
+        #     print('Current: ', listing.skill.id)
+
+    user_scores = listingScore(listing_skills_dict, app_skills_dict)
     top_listings = getMax(user_scores)
     output = ''
     for i, listing in enumerate(top_listings):
@@ -359,18 +406,7 @@ def scoreListings(user):
     return top_listings
     # return HttpResponse(output)
 
-def applyToJob (request):
 
-    listing = Listing.objects.get(id=getUserInfo())
-    applicant = Applicant.objects.get(id=getUserInfo())
-    status = 'Pending'
-    matchingSkills = 0
-    
-    application = Application(listing = listing, applicant = applicant, status=status, matching_skills = matchingSkills)
-
-    application.save()
-    
-    return redirect("application")
 
 def aboutPageView (request):
     return render(request, 'applicant/about.html')

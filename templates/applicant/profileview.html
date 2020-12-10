@@ -27,35 +27,42 @@
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <h6>First Name</h6>
-                            <p>{{applicant.first_name}}</p>
+                            <p>{{first_name}}</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <h6>Last Name</h6>
-                            <p>{{applicant.last_name}}</p>
+                            <p>{{last_name}}</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <h6>Username</h6>
-                            <p>{{applicant.username}}</p>                    
+                            <p>{{username}}</p>                    
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
                             <h6>Email</h6>
-                            <p>{{applicant.email}}</p>
+                            <p>{{email}}</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <div class="form-group floating-label-form-group controls mb-0 pb-2">
-                            <h6>Resume</h6>
-                            <!--<p>{{applicant.resume.url}}</p>-->
-                            <form method='POST' action="{% url 'downloadProfileResume'%}">
-                                <a href="{{applicant.resume.url}}" Download>Download</a>
-                                <input hidden name='id' value='applicant.id'> 
-                            </form>
+                            <!--<h6>Resume</h6>
+                            <p>{{dirs}}</p>-->
+                            
+                            {% if resume %}
+                                {% if resume == '/media/files/resume.txt' %}
+                                    <p><i>No Resume Uploaded</i></p>
+                                {% else %}
+                                <a class = 'btn btn-primary' style='margin-top:.5rem' href="{{dirs}}" download>Download Resume</a>
+                                {% endif %}
+                            {% else %}
+                                <p><i>No Resume Uploaded</i></p>
+                            {% endif %}
+                            
                         </div>
                     </div>
                     <br />
