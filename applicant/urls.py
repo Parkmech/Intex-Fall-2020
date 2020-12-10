@@ -4,7 +4,7 @@ from .views import addProfile, applicantPageView, \
     createScore, editProfile, resumePageView, saveListing, skillsPageView, profilePageView,\
     createScore, scoreListings, searchListings, addProfile, addSkills, \
         deleteSkills, savedListingsPageView, unsaveListing, profileEditPageView, applicationView, applyToJob, \
-            aboutPageView, aboutInPageView, deleteApplication, downloadProfileResume
+            aboutPageView, aboutInPageView, deleteApplication, downloadProfileResume, salaryRandom
 
 urlpatterns = [
     path('resume/', resumePageView, name='resume'),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('about/', aboutPageView, name='about'),
     path('aboutin/', aboutInPageView, name='aboutin'),
     path('', applicantPageView, name='applicant'),
+    path('salaryRandom/', salaryRandom, name='salaryRandom'),
 ]

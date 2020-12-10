@@ -66,11 +66,15 @@
                                 <div class="form-group floating-label-form-group controls mb-0 pb-2">
                                     <label>Skill</label>
                                     <div style="display: flex;flex-wrap: nowrap;flex-direction: row;">
-                                        <input class="form-control" id="name" name= 'skill' type="text" list = 'test' placeholder="Type Skill Here" required="required" data-validation-required-message="Please enter your name." style="max-width: 40%;"/>
-                                        <div>
+                                        <input class="form-control" id="name" name= 'skill' type="text" list = 'test' placeholder="Type Skill Here" required="required" data-validation-required-message="Please enter your name." style="max-width: 40%;background-color:#eee9e6 !important"/>
+                                        <div style="display: flex;flex-wrap: nowrap;flex-direction: row;">
                                             <input type="number" name = 'level' step="1" width="4rem" placeholder="level"  min="1" max="4"  value="1" />
-                                            <p style="font-size: .8rem;font-style: italic;">Specify your knowlege level 1 - 4</p>
+                                            <div style="display: flex;flex-wrap: nowrap;flex-direction: column;">
+                                                <p style="font-size: .8rem;font-style: italic;">Specify your knowlege level 1 - 4</p>
+                                                <p style="font-size: .8rem;font-style: italic;">(1: Entry Level, 2: 1-2 years experience, 3: 2-5 years experience, 4: 5+ years)</p>
+                                            </div>
                                         </div>
+                                        
                                     </div>
                                     <datalist id="test">
                                         {% for skill in skills_list %}
@@ -86,7 +90,7 @@
                             <div id="success"></div>
                             <div class="form-group" style='display:flex;'>
                                 <button class="btn btn-primary btn-xl" id="sendMessageButton" type="submit">Add</button>
-                                <p style='color:#EEE9E6'>--</p>
+                                <p style='color:#eee9e6'>--</p>
                                 <a class='btn btn-primary btn-xl' href="{% url 'employer'%}">Done</a>
                             </div>
                         </form>

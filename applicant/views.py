@@ -1,5 +1,6 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
+from random import randint
 from django.shortcuts import redirect
 from django.http import FileResponse
 from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Listing, SavedListing, Skill, Application
@@ -8,6 +9,17 @@ from .models import Applicant, ApplicantSkill, Organization, PreferredSkill, Lis
 # from login.users import set_user
 
 #RETURN USER INFO FOR THE SESSION
+def salaryRandom():
+    
+    salary = randint(50000, 80000)
+
+    if (salary > 65000):
+        relAssist = 'Yes'
+    else:
+        relAssist = 'No'
+
+    return salary, relAssist
+
 def getUserInfo():
     file = open('current_user.txt', 'r')
     current_user =  int(file.readline())
@@ -121,7 +133,9 @@ def applicantPageView(request):
         'listings' : listings,
         'applicant' : user,
         'skills': skills,
-        'applicant_skills' : applicant_skill_ids
+        'applicant_skills' : applicant_skill_ids,
+        'salary' : salaryRandom()[0],
+        'relAssist' : salaryRandom()[1],
     }
     
     return render(request, "applicant/landing.html", context)
@@ -184,8 +198,8 @@ def editProfile(request):
     editApp = Applicant.objects.get(id=user)
     editApp.first_name = request.POST.get("appFirst")
     editApp.last_name = request.POST.get("appLast")
-    print('========Request=================',request.FILES['files'])
-    editApp.resume = request.FILES['file']
+    #print('++++++++++++++Request--+++++++++++++','==============================')
+    #editApp.resume = request.FILES['resume']
     editApp.save()
 
     return redirect("appProfileView")
@@ -325,8 +339,7 @@ def createScore(listing_id): #Add the listingId as a parameter
     return top_applicants
 
 def applyToJob (request):
-
-    listing = Listing.objects.get(id=getUserInfo())
+    listing = Listing.objects.get(id = request.POST.get('apply'))
     applicant = Applicant.objects.get(id=getUserInfo())
     status = 'Pending'
     matchingSkills = 0
@@ -413,3 +426,4 @@ def aboutPageView (request):
 
 def aboutInPageView (request):
     return render(request, 'applicant/aboutin.html')
+
